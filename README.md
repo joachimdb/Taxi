@@ -18,4 +18,4 @@ Work in progress...
 
 * Run the following to clone the Taxi project into a local repository:
 
-    git clone git://github.com/clojure/clojurescript.git
+    git clone git://github.com/joachimdb/Taxi.git
