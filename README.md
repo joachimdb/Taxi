@@ -1,8 +1,8 @@
 # Taxi! (drive2gather) Code #
 
-* This code was originally taken from the blog post here: http://www.digitalbricklayers.com/2012/03/geotasklist-in-jquery-mobile-and.html
+* This code was modified from http://www.digitalbricklayers.com/2012/03/geotasklist-in-jquery-mobile-and.html
 
-It chronicles us building a mobile ride-sharing web app using the following technologies:
+* It chronicles us building a mobile ride-sharing web app using the following technologies:
 
 - Clojure
 - Compojure
@@ -14,8 +14,17 @@ It chronicles us building a mobile ride-sharing web app using the following tech
 - Cheshire (for JSON)
 - Appengine Magic
 
-Work in progress...
+* Rationale:
+
+- log in with your google account
+- add/delete locations
+- add/delete routes between locations
+- request directions for a route
 
 * Run the following to clone the Taxi project into a local repository:
 
     git clone git://github.com/joachimdb/Taxi.git
+
+
+* Note: Work in progress!
+

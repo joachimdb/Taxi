@@ -3,7 +3,8 @@
             [compojure.route :as route]
             [appengine-magic.services.user :as aeu]             
             )
-  (:use [compojure.core] 
+  (:use [compojure.core]
+        ;; [noir.core]
         [cheshire.core :as json] 
         [ring.util.response :as ring-response]
         [compojure.handler :as comp-handler]
@@ -27,28 +28,27 @@
   (.getEmail (aeu/current-user)))
 
 (defroutes taxi-main-handler
-           ;Get All Locations Routes
            (GET "/" [] (ring-response/redirect "/index.html"))
            
            (GET "/locations" []
-                (json-response {:locations (persist/get-all-locations (getEmail))}))
+                (json-response {:locations (persist/get-all-locations)}))
 
-           ;Delete Location Route           
-           (POST "/delete-location" {params :params} 
-                 (json-response (persist/delete-location (getEmail) (Integer/parseInt (:locationId params)))))
+           ;; ;Delete Location Route           
+           ;; (POST "/delete-location" {params :params} 
+           ;;       (json-response (persist/delete-location (getEmail) (Integer/parseInt (:locationId params)))))
 
            ;Update Location Route                                 
            (POST "/location" {params :params} 
-                 (json-response {:locationId (persist/save-location (getEmail) params)}))                         
+                 (json-response {:locationId (persist/save-location (getEmail) params)}))
 
-           (GET "/tasks" []
-                (json-response {:tasks (get-all-tasks (getEmail))}))           
+           ;; (GET "/tasks" []
+           ;;      (json-response {:tasks (get-all-tasks (getEmail))}))           
            
-           (POST "/task" {params :params} 
-                 (json-response {:taskId (persist/save-task (getEmail) params)}))                         
+           ;; (POST "/task" {params :params} 
+           ;;       (json-response {:taskId (persist/save-task (getEmail) params)}))                         
            
-           (POST "/complete-task" {params :params} 
-                 (json-response {:taskId (persist/complete-task (getEmail) (Integer/parseInt (:taskId params)))}))
+           ;; (POST "/complete-task" {params :params} 
+           ;;       (json-response {:taskId (persist/complete-task (getEmail) (Integer/parseInt (:taskId params)))}))
 
            ;Static Resources           
            (route/resources "/")
@@ -56,7 +56,6 @@
 
 
 (def app (require-login (comp-handler/api taxi-main-handler)))
-
 (ae/def-appengine-app taxi-app (var app))
 
 (comment
