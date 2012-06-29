@@ -1,0 +1,23 @@
+- to clone from github:
+
+    git clone git://github.com/joachimdb/Taxi.git
+
+- to submit local changes:
+
+    git submit -A
+
+- to push local changes to github:
+
+    git push git@github.com:joachimdb/Taxi.git master
+
+- to deploy to Google App Engine:
+
+    1) Manually maintain the version field in appengine-web.xml
+    2) lein appengine-prepare 
+    3) make sure the application id is properly set in appengine-web.xml
+    3) run appcfg.sh update with a path to your application's war/ 
+
+- to use the app:
+
+    go to http://http://drive2gather.appspot.com/index.htm
+

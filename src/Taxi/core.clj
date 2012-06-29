@@ -29,18 +29,28 @@
 
 (defroutes taxi-main-handler
            (GET "/" [] (ring-response/redirect "/index.html"))
+
+           (GET "/location:id" [id]
+                (if-let [id-string (re-matches #":[0-9]+" id)]
+                  (json-response (persist/get-location (Integer/parseInt (apply str (drop 1 id-string)))))))
+           
            
            (GET "/locations" []
                 (json-response {:locations (persist/get-all-locations)}))
 
-           ;; ;Delete Location Route           
-           ;; (POST "/delete-location" {params :params} 
-           ;;       (json-response (persist/delete-location (getEmail) (Integer/parseInt (:locationId params)))))
+           (POST "/delete-location" {params :params} 
+                 (json-response (persist/delete-location (getEmail) (Integer/parseInt (:locationId params)))))
 
-           ;Update Location Route                                 
-           (POST "/location" {params :params} 
-                 (json-response {:locationId (persist/save-location (getEmail) params)}))
+           ;; Update Location Route                                 
+           (POST "/location" {params :params}
+                 (println)
+                 (println params)
+                 (let [response (persist/save-location (getEmail) params)]
+                   (println response)
+                   (println (json-response response))
+                   (json-response response)))
 
+           
            ;; (GET "/tasks" []
            ;;      (json-response {:tasks (get-all-tasks (getEmail))}))           
            

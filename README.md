@@ -17,8 +17,8 @@
 * Rationale:
 
 - log in with your google account
-- add/delete locations
-- add/delete routes between locations
+- add locations
+- add routes between locations
 - request directions for a route
 
 * Run the following to clone the Taxi project into a local repository:
