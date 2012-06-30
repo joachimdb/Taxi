@@ -67,15 +67,28 @@
           <input id="locationId" name="locationId" type="hidden"/>
 	  <input id="locationLat" name="locationLat" type="hidden"/>
           <input id="locationLng" name="locationLng" type="hidden"/>
-          <label for="locationName">Name</label>
+          <!-- <label for="locationName">Name</label> -->
           <input id="locationName" name="locationName" type="text"  class="required" minlength="2"/ value="Enter name...">
+	  <a href="#navigation-page" data-role="button" id="start-navigation" data-inline="true">Go!</a>
           <input type="submit" value="Save" data-inline="true"/>
           <a href="#" data-role="button" id="location-delete" data-inline="true">Delete</a>
-          <a href="#" data-role="button" id="cancel-edit" data-inline="true">Cancel</a>
+          <!-- <a href="#" data-role="button" id="cancel-edit" data-inline="true">Cancel</a> -->
         </form>
       </div>
     </div>
     <script type="text/javascript" src="edit-location-page.js"></script>
+
+    <!-- Navigation Page -->
+    <div data-role="page" id="navigation-page">
+      <!-- show a map indicating the route, current location and direction -->
+      <!-- and a message indicating driving directions -->
+      <div data-role="content">
+	<div id="nav_map_canvas" style="width:100%;height:200px">nav_map_canvas</div>
+	<div id="nav_directions_panel" style="width:100%;height:100px"></div>
+      </div>
+      <a href="#" data-role="button" id="cancel-navigation" data-inline="true">Cancel</a>
+    </div>
+    <script type="text/javascript" src="navigation-page.js"></script>
 
  </body>
 </html>
