@@ -5,11 +5,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <link rel="stylesheet" href="http://code.jquery.com/mobile/latest/jquery.mobile.min.css" />
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/mobile/latest/jquery.mobile.min.js"></script>
     <script type="text/javascript"
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDEmEr5JLthqPARRbnDEdxNvKqTt8LSRns&sensor=false">
     </script>
-    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
-    <script type="text/javascript" charset="utf-8" src="http://code.jquery.com/mobile/latest/jquery.mobile.min.js"></script>
     <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js"></script>    
     <script type="text/javascript" src="map.js"></script>
     <script type="text/javascript" src="core.js"></script>
@@ -80,11 +80,11 @@
 
     <!-- Navigation Page -->
     <div data-role="page" id="navigation-page">
-      <!-- show a map indicating the route, current location and direction -->
-      <!-- and a message indicating driving directions -->
+      <!-- show a map indicating the route -->
+      <!-- and a panel with driving directions -->
       <div data-role="content">
 	<div id="nav_map_canvas" style="width:100%;height:200px">nav_map_canvas</div>
-	<div id="nav_directions_panel" style="width:100%;height:100px"></div>
+	<div id="nav_directions_panel" style="width:100%;height:100px;overflow:scroll"</div>
       </div>
       <a href="#" data-role="button" id="cancel-navigation" data-inline="true">Cancel</a>
     </div>

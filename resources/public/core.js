@@ -76,46 +76,42 @@ function initMarkers(toMap) {
 		   })})
 }
 
-function initialize () {
-    directionsDisplay = new google.maps.DirectionsRenderer();
+function setCurrentLocation (callback) {
     if (navigator.geolocation) {
-	
-        navigator.geolocation.getCurrentPosition(function(position) {
-	    
-     	    currentLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
-	    setMap(currentLocation);
-	    initMarkers(map);
-	    
-		<!-- 	// google.maps.event.addListener(map, 'click', function(event) { -->
-		<!-- 	//     placeLocationMarker(event.latLng); -->
-		<!-- 	// }); -->
-	    
+        navigator.geolocation.getCurrentPosition(function (position) {
+    	    currentLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+	    callback();
 	}, function (error) {
 	    currentLocation = new google.maps.LatLng(51.03,13.43);
-	    setMap(currentLocation);
-	    initMarkers(map);
-	    switch(error.code) 
-	    {
-	    case error.TIMEOUT:
-		alert ('Timeout');
-		break;
-	    case error.POSITION_UNAVAILABLE:
-		alert ('Position unavailable');
-		break;
-	    case error.PERMISSION_DENIED:
-		alert ('Permission denied');
-		break;
-	    case error.UNKNOWN_ERROR:
-		alert ('Unknown error');
-		break;
-	    }
-	})}
-    else {
-	currentLocation = new google.maps.LatLng(51.03,13.43);
+    	    setMap(currentLocation);
+    	    initMarkers(map);
+    	    switch(error.code) 
+    	    {
+    	    case error.TIMEOUT:
+    	     	alert ('Timeout');
+    	     	break;
+    	    case error.POSITION_UNAVAILABLE:
+    	     	alert ('Position unavailable');
+    	     	break;
+    	    case error.PERMISSION_DENIED:
+    	     	alert ('Permission denied');
+    	     	break;
+    	    case error.UNKNOWN_ERROR:
+	 	alert ('Unknown error');
+	 	break;
+	    }})
+    } else {
+	alert('Geo-location not available');
     }
-    
 }
 
+function initialize () {
+    directionsDisplay = new google.maps.DirectionsRenderer();
+    setCurrentLocation(function () {
+	setMap(currentLocation);
+	initMarkers(map);
+    })
+}
 
 // function calcRoute() {
 //     var start = document.getElementById("start").value;
