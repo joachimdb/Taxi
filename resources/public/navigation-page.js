@@ -9,9 +9,9 @@ var directions;
 
 function initializeDirections() {
     var Options = {
-	zoom: zoomLevel,
-	mapTypeId: google.maps.MapTypeId.ROADMAP,
-	center: currentLocation
+	  zoom: zoomLevel,
+	  mapTypeId: google.maps.MapTypeId.ROADMAP,
+	  center: currentLocation
     };
     navigationMap = new google.maps.Map(document.getElementById("directions_map_canvas"), Options);
     directionsDisplay.setMap(navigationMap);
@@ -21,23 +21,6 @@ function initializeDirections() {
     var destinationLng = $("form[name='edit-destination-form'] input[name='destinationLng']").val();
     targetLocation = new google.maps.LatLng(destinationLat,destinationLng);
 }
-
-// Gent-Kortrijk:
-// routes:
-//   bounds: (LatLng,LatLng)
-//   copyright: undefined
-//   legs[0]:
-//     distance
-//     duration
-//     end_adress
-//     ...
-//   overview_polyline: [points]
-//   summary: "E17"
-//   warnings: ""
-//   waypoint_order: ""
-//   overview_path: list of LatLng
-// status
-// yb
 
 function calcRoute(origin,destination) {
     var request = {
@@ -84,9 +67,9 @@ function calcRoute(origin,destination) {
 
 $( '#directions-page' ).live( 'pageshow',function(event){
     $(function() {
-	initializeDirections();
-	calcRoute(currentLocation,targetLocation);
-	// now repeatedly check currentLocation and call calcRoute again
+  	  initializeDirections();
+	  calcRoute(currentLocation,targetLocation);
+	  // for navigation: repeatedly check currentLocation and call calcRoute again
     })
 })
 

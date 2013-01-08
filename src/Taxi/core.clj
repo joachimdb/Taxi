@@ -36,7 +36,11 @@
        (json-response (user/get-all-users)))
   
   (POST "/new-location" {params :params}
-        (let [response (loc/save-location! (:id params) 
+        (println "save-location: " params)
+        (println "id: " (:id params)) 
+        (let [id (when (:id params)
+                   (Integer/parseInt (:id params)))
+              response (loc/save-location! id 
                                            (user/current-user-id)
                                            (dissoc params :id))]
           (println "resp: " response)
@@ -47,7 +51,9 @@
            (json-response (loc/get-location (Integer/parseInt (apply str (drop 1 id-string)))))))
   
   (POST "/delete-location" {params :params} 
-        (json-response (loc/delete-location (Integer/parseInt (:id params) (user/current-user-id)))))
+        (println "delete-location: " params)
+        (json-response (loc/delete-location (Integer/parseInt (:id params))
+                                            (user/current-user-id))))
   
   (GET "/locations" []
        (json-response (loc/get-all-locations)))
