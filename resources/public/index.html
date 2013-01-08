@@ -69,7 +69,7 @@
           <input id="locationLng" name="locationLng" type="hidden"/>
           <!-- <label for="locationName">Name</label> -->
           <input id="locationName" name="locationName" type="text"  class="required" minlength="2"/ value="Enter name...">
-	  <a href="#navigation-page" data-role="button" id="start-navigation" data-inline="true">Go!</a>
+	  <a href="#directions-page" data-role="button" id="give-directions" data-inline="true">Directions</a>
           <input type="submit" value="Save" data-inline="true"/>
           <a href="#" data-role="button" id="location-delete" data-inline="true">Delete</a>
           <!-- <a href="#" data-role="button" id="cancel-edit" data-inline="true">Cancel</a> -->
@@ -78,17 +78,17 @@
     </div>
     <script type="text/javascript" src="edit-location-page.js"></script>
 
-    <!-- Navigation Page -->
-    <div data-role="page" id="navigation-page">
+    <!-- Directions Page -->
+    <div data-role="page" id="directions-page">
       <!-- show a map indicating the route -->
       <!-- and a panel with driving directions -->
       <div data-role="content">
-	<div id="nav_map_canvas" style="width:100%;height:200px">nav_map_canvas</div>
-	<div id="nav_directions_panel" style="width:100%;height:100px;overflow:scroll"</div>
+	<div id="directions_map_canvas" style="width:100%;height:200px">directions_map_canvas</div>
+	<div id="directions_panel" style="width:100%;overflow:scroll"</div>
       </div>
-      <a href="#" data-role="button" id="cancel-navigation" data-inline="true">Cancel</a>
+      <a href="#" data-role="button" id="cancel-directions" data-inline="true">Cancel</a>
     </div>
-    <script type="text/javascript" src="navigation-page.js"></script>
+    <script type="text/javascript" src="directions-page.js"></script>
 
  </body>
 </html>

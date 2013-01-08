@@ -1,23 +1,9 @@
 (ns Taxi.persistence
-  (:require [appengine-magic.services.datastore :as ds]))
+  (:require [appengine-magic.services.datastore :as ds]
+            [appengine-magic.services.user :as aeu]))
 
-
-(ds/defentity Loc [^:key storeId, user, ^:clj locationFields])
-
-;; (def id-counter (atom 0))
-(def loc (Loc. nil
-               "joachim@gmail.com"
-               {:storeId -1, :locationLat 50.930256568263424, :locationLng 3.1081988902343394, :locationName "Roeselare"}))
-;;(ds/get-entity-object loc)
-;; ;Save a location using own incremental id-counter when -1 is used
-;; ;to signify no id passed in
-
-;; ;should be substitued
-;; (defn save-location [user location-map] 
-;;   (let [input-id (Integer/parseInt (:locationId location-map))
-;;         id (if (= input-id -1) (swap! id-counter inc) input-id)]
-;;     (ds/save! (Location. id user location-map))))
-
+(ds/defentity Loc [#^:key storeId, user, #^:clj location-fields])
+               
 ; Save a location. -1 is used to signify no id passed in and nil
 ; should be substitued
 (defn save-location [user locationFields] 
@@ -86,3 +72,22 @@
 ;;       (ds/query :kind Task :filter  [(= :user user) (= :complete "false")]))))
 
 
+(ds/defentity User [^:key email, nickname])
+
+(defn current-user []
+  (let [u (aeu/current-user)]
+    (User. (.getEmail u) (.getNickname u))))
+
+(defn save-user! [user] 
+;;  (ds/save! user))
+  (let [return-val (ds/save! user)]
+    (assoc return-val :storeId (.getId (:key (meta return-val))))))
+
+(defn new-user! [email nick]
+  (save-user! (User. email nick)))
+
+(defn get-user [storeId]
+  (ds/retrieve User storeId))
+
+(defn get-all-users []
+  (ds/query :kind User))
