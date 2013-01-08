@@ -4,9 +4,9 @@ var markers = {};
 var currentLocation;
 var zoomLevel = 10;
 var defaultMapTypeId = google.maps.MapTypeId.ROADMAP;
-var selectedLocation;
+var selectedDestination;
 var directionsDisplay;
-var noLocations = true;
+var noDestinations = true;
 
 var directionsService = new google.maps.DirectionsService();
 
@@ -25,20 +25,20 @@ function setMap(center) {
 }
 
 function mapClicked(LatLng) {
-    // move center of map to clicked position and go to add-location-page
+    // move center of map to clicked position and go to add-destination-popup
     map.panTo(LatLng)
-    $.mobile.changePage($("#add-location-page"), { transition: "pop", role: "dialog", reverse: false });
+    $.mobile.changePage($("#add-destination-popup"), { transition: "pop", role: "dialog", reverse: false });
 }
 
 function addMarker(ID,Lat,Lng,toMap) {
     var marker = new google.maps.Marker({
-  	position: new google.maps.LatLng(Lat,Lng),
-	map: toMap
-	// draggable: true
-    });
+  	               position: new google.maps.LatLng(Lat,Lng),
+	               map: toMap
+	               // draggable: true
+                 });
     markers[ID]=marker;
     google.maps.event.addListener(marker, 'click', function() {
-	markerClicked(ID);
+    	markerClicked(ID);
     })
 }
 
@@ -56,23 +56,26 @@ function deleteMarker(ID) {
 }
 				  
 function markerClicked(ID) {
-    $.getJSON( '/location:'+ID,function(location) {
- 	$("form[name='location-edit-form'] input[name='locationId']").val(ID);
- 	$("form[name='location-edit-form'] input[name='locationLat']").val(location.locationLat);
- 	$("form[name='location-edit-form'] input[name='locationLng']").val(location.locationLng);
- 	$("form[name='location-edit-form'] input[name='locationName']").val(location.locationName);
- 	$('#delete-point-text').html(location.locationName);
- 	$.mobile.changePage($("#edit-location-page"), { transition: "pop", role: "dialog", reverse: false } );
+    $.getJSON( '/get-location:'+ID,function(destination) {
+    	$("form[name='edit-destination-form'] input[name='id']").val(ID);
+    	$("form[name='edit-destination-form'] input[name='Lat']").val(destination.fields.Lat);
+    	$("form[name='edit-destination-form'] input[name='Lng']").val(destination.fields.Lng);
+    	$("form[name='edit-destination-form'] input[name='Name']").val(destination.fields.Name);
+    	// $('#delete-point-text').html(destination.fields.Name);
+    	$.mobile.changePage($("#edit-destination-popup"), { transition: "pop", role: "dialog", reverse: false } );
     })
 }
 
 function initMarkers(toMap) {
     $.getJSON( '/locations',
                function(data) {
-		   noLocations = (data.locations.length == 0 );
-		   $.each(data.locations, function(i, location) {		
-		       addMarker(location.locationId,location.locationLat,location.locationLng,toMap)
-		       //showMarker(location.locationId)
+		   noDestinations = (data.length == 0 );
+		   $.each(data, function(i, destination) {		
+		       addMarker(destination.id,
+		    		   	 destination.fields.Lat,
+		    		   	 destination.fields.Lng,
+		    		   	 toMap)
+		       //showMarker(destination.destinationId)
 		   })})
 }
 
@@ -108,9 +111,9 @@ function setCurrentLocation (callback) {
 function initialize () {
     directionsDisplay = new google.maps.DirectionsRenderer();
     setCurrentLocation(function () {
-	setMap(currentLocation);
-	initMarkers(map);
-    })
+	  setMap(currentLocation);
+	  initMarkers(map);
+      })
 }
 
 // function calcRoute() {

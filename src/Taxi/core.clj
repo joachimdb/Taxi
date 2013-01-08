@@ -8,9 +8,10 @@
         [cheshire.core :as json] 
         [ring.util.response :as ring-response]
         [compojure.handler :as comp-handler]
-        [Taxi.usr-management :as user]))
+        [Taxi.usr-management :as user]
+        [Taxi.location-management :as loc]))
 
- (ae/stop)
+(ae/stop)
 
 (defn json-response [data & [status]]
   {:status (or status 200)
@@ -24,21 +25,32 @@
         (println "checking if user " current-user-id " exists")
         (when-not (user/get-user current-user-id)
           (println "new-user!")
-          (user/new-user! current-user-id))
+          (user/save-user! current-user-id))
         (application request))
       (ring-response/redirect (aeu/login-url)))))
-
-(defn getEmail [] 
-  (.getEmail (aeu/current-user)))
 
 (defroutes taxi-main-handler
   (GET "/" [] (ring-response/redirect "/index.html"))
   
-;  (GET "/user:email" [email]
-;       (json-response (user/get-user email)))
-  
   (GET "/users" []
        (json-response (user/get-all-users)))
+  
+  (POST "/new-location" {params :params}
+        (let [response (loc/save-location! (:id params) 
+                                           (user/current-user-id)
+                                           (dissoc params :id))]
+          (println "resp: " response)
+          (json-response response)))
+  
+  (GET "/get-location:id" [id]
+        (if-let [id-string (re-matches #":[0-9]+" id)]
+           (json-response (loc/get-location (Integer/parseInt (apply str (drop 1 id-string)))))))
+  
+  (POST "/delete-location" {params :params} 
+        (json-response (loc/delete-location (Integer/parseInt (:id params) (user/current-user-id)))))
+  
+  (GET "/locations" []
+       (json-response (loc/get-all-locations)))
   
   (route/resources "/")
   (route/not-found "Page not found"))

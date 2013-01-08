@@ -8,7 +8,7 @@
     <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script type="text/javascript" src="http://code.jquery.com/mobile/latest/jquery.mobile.min.js"></script>
     <script type="text/javascript"
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDEmEr5JLthqPARRbnDEdxNvKqTt8LSRns&sensor=false">
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDEmEr5JLthqPARRbnDEdxNvKqTt8LSRns&sensor=false">
     </script>
     <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js"></script>    
     <script type="text/javascript" src="map.js"></script>
@@ -17,79 +17,64 @@
 
   <body  onload="initialize()">
 
-    <!-- Location Page -->
-    <div data-role="page" id="location-page">
-      <div data-role="navbar">
-	<ul>
-          <li><a href="#routes-page" id="show-routes-page">Routes</a></li>
-          <li><a href="#location-page" class="ui-btn-active ui-state-persist">Locations</a></li>
-	</ul>
-      </div>
-    
+    <!-- Destinations Page -->
+    <div data-role="page" id="destination-page">
       <div data-role="content">
-	<div id="map_canvas" style="width:100%;height:300px"></div>
+	    <div id="map_canvas" style="width:100%;height:300px"></div>
       </div>
-      <a href="#" data-role="button" id="add-location" data-inline="true">Add Location</a>
+      <a href="#" data-role="button" id="add-destination-button" data-inline="true">Add Destination</a>
     </div>
-    <script type="text/javascript" src="location-page.js"></script>
+    <script type="text/javascript" src="destination-page.js"></script>
 
-    <!-- Add Location Popup-->
-    <div data-role="page" id="add-location-page">
-
+    <!-- Add Destination Popup-->
+    <div data-role="page" id="add-destination-popup">
       <div data-role="header">
-        <h1>Location</h1>
+        <h1>Destination</h1>
       </div>
       <div data-role="content">
-
-        <form name="location-add-form">
-          <input id="locationId" name="locationId" type="hidden"/>
-          <label>Position (Lat,Lng)</label><br>
-	  <input id="locationLat" name="locationLat" type="text" class="required"/>
-          <input id="locationLng" name="locationLng" type="text" class="required"/>
-          <label for="locationName">Name</label>
-          <input id="locationName" name="locationName" type="text"  class="required" minlength="2"/ value="Enter name...">
+        <form name="add-destination-form">
+          <label>Destination</label><br>
+	      <input id="Lat" name="Lat" type="text" class="required"/>
+          <input id="Lng" name="Lng" type="text" class="required"/>
+          <label for="Name">Name</label>
+          <input id="Name" name="Name" type="text"  class="required" minlength="2"/ value="Enter name...">
           <input type="submit" value="Save" data-inline="true"/>
-          <a href="#" data-role="button" id="cancel-add" data-inline="true">Cancel</a>
+          <a href="#" data-role="button" id="cancel-add-button" data-inline="true">Cancel</a>
         </form>
       </div>
     </div>
-    <script type="text/javascript" src="add-location-page.js"></script>
+    <script type="text/javascript" src="add-destination-popup.js"></script>
 
-    <!-- Edit Location Popup-->
-    <div data-role="page" id="edit-location-page">
-
+    <!-- Edit Destination Popup-->
+    <div data-role="page" id="edit-destination-popup">
       <div data-role="header">
-        <h1>Location</h1>
+        <h1>Destination</h1>
       </div>
       <div data-role="content">
-
-        <form name="location-edit-form">
-          <input id="locationId" name="locationId" type="hidden"/>
-	  <input id="locationLat" name="locationLat" type="hidden"/>
-          <input id="locationLng" name="locationLng" type="hidden"/>
-          <!-- <label for="locationName">Name</label> -->
-          <input id="locationName" name="locationName" type="text"  class="required" minlength="2"/ value="Enter name...">
-	  <a href="#directions-page" data-role="button" id="give-directions" data-inline="true">Directions</a>
+        <form name="edit-destination-form">
+          <input id="id" name="id" type="hidden"/>
+	      <input id="Lat" name="Lat"/>
+          <input id="Lng" name="Lng"/>
+          <input id="Name" name="Name" type="text"  class="required">
+	      <a href="#navigation-page" data-role="button" id="start-navigation-button" data-inline="true">Go!</a>
           <input type="submit" value="Save" data-inline="true"/>
-          <a href="#" data-role="button" id="location-delete" data-inline="true">Delete</a>
-          <!-- <a href="#" data-role="button" id="cancel-edit" data-inline="true">Cancel</a> -->
+          <a href="#" data-role="button" id="delete-destination-button" data-inline="true">Delete</a>
+          <!-- <a href="#" data-role="button" id="cancel-edit-button" data-inline="true">Cancel</a> -->
         </form>
       </div>
     </div>
-    <script type="text/javascript" src="edit-location-page.js"></script>
+    <script type="text/javascript" src="edit-destination-popup.js"></script>
 
-    <!-- Directions Page -->
-    <div data-role="page" id="directions-page">
-      <!-- show a map indicating the route -->
-      <!-- and a panel with driving directions -->
+    <!-- Navigation Page -->
+    <div data-role="page" id="navigation-page">
       <div data-role="content">
-	<div id="directions_map_canvas" style="width:100%;height:200px">directions_map_canvas</div>
-	<div id="directions_panel" style="width:100%;overflow:scroll"</div>
+	    <div id="navigation_map_canvas" style="width:100%;height:200px">navigation_map_canvas</div>
+	    <div id="navigation_panel" style="width:100%;overflow:scroll"</div>
       </div>
-      <a href="#" data-role="button" id="cancel-directions" data-inline="true">Cancel</a>
+      <a href="#" data-role="button" id="cancel-navigation-button" data-inline="true">Cancel</a>
     </div>
-    <script type="text/javascript" src="directions-page.js"></script>
+    <script type="text/javascript" src="navigation-page.js"></script>
 
- </body>
+  </body>
 </html>
 
