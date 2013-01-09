@@ -1,7 +1,7 @@
 var map;
 var markers = {};
 
-var currentLocation;
+var currentLocation = {};
 var zoomLevel = 10;
 var defaultMapTypeId = google.maps.MapTypeId.ROADMAP;
 var selectedDestination;
@@ -9,17 +9,17 @@ var directionsDisplay;
 var noDestinations = true;
 
 var directionsService = new google.maps.DirectionsService();
-
+	
 function setMap(center) {
     var Options = {
-	zoom: zoomLevel,
-	mapTypeId: defaultMapTypeId,
-	center: center
+    		zoom: zoomLevel,
+    		mapTypeId: defaultMapTypeId,
+    		center: center
     }
     map = new google.maps.Map(document.getElementById("map_canvas"), Options);
     google.maps.event.addListener(map, 'click', function(event) {
-	mapClicked(event.latLng);
-    });
+    	mapClicked(event.latLng);
+    });	
     directionsDisplay.setMap(map);
     //directionsDisplay.setPanel(document.getElementById("directionsPanel"));
 }
@@ -79,40 +79,61 @@ function initMarkers(toMap) {
 		   })})
 }
 
+//function getAddress (latlng) {	
+//var geocoder = new google.maps.Geocoder();	
+//
+//geocoder.geocode({'latLng': latlng}, function(results, status) {
+//	if (status == google.maps.GeocoderStatus.OK) {
+//		results[0].formatted_address;
+//	} else {
+//		alert("Geocoder failed due to: " + status);
+//	}
+//})
+//}
+
 function setCurrentLocation (callback) {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function (position) {
-    	    currentLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
-	    callback();
-	}, function (error) {
-	    currentLocation = new google.maps.LatLng(51.03,13.43);
-    	    setMap(currentLocation);
-    	    initMarkers(map);
-    	    switch(error.code) 
-    	    {
-    	    case error.TIMEOUT:
-    	     	alert ('Timeout');
-    	     	break;
-    	    case error.POSITION_UNAVAILABLE:
-    	     	alert ('Position unavailable');
-    	     	break;
+	if (navigator.geolocation) {
+		navigator.geolocation.getCurrentPosition(function (position) {
+			currentLocation.LatLng = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+			var geocoder = new google.maps.Geocoder();
+			geocoder.geocode({'latLng': currentLocation.LatLng},function(results, status) {
+				if (status == google.maps.GeocoderStatus.OK) {
+					currentLocation.Address = results[0].formatted_address;
+					callback();
+				} else {
+					alert("Reverse geocode not successful: " + status);
+					callback();
+				}})
+		}, function (error) {
+        	currentLocation.LatLng = new google.maps.LatLng(51.03,13.43);
+        	switch(error.code) 
+        	{
+        	case error.TIMEOUT:
+        		alert ('Timeout');
+        		break;
+        	case error.POSITION_UNAVAILABLE:
+        		alert ('Position unavailable');
+        		break;
     	    case error.PERMISSION_DENIED:
     	     	alert ('Permission denied');
     	     	break;
     	    case error.UNKNOWN_ERROR:
-	 	alert ('Unknown error');
-	 	break;
-	    }})
-    } else {
-	alert('Geo-location not available');
-    }
+    	    	alert ('Unknown error');
+    	    	break;
+        	}
+        callback();})
+	} else {
+		alert('Geo-location not available');
+		callback();
+	}
 }
 
 function initialize () {
     directionsDisplay = new google.maps.DirectionsRenderer();
     setCurrentLocation(function () {
-	  setMap(currentLocation);
-	  initMarkers(map);
+    	setMap(currentLocation.LatLng);
+    	initMarkers(map);
+    	$('#SearchField').val(currentLocation.Address);
       })
 }
 

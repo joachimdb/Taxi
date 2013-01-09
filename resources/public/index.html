@@ -16,28 +16,42 @@
   </head>
 
   <body  onload="initialize()">
-
+	
     <!-- Destinations Page -->
     <div data-role="page" id="destination-page">
       <div data-role="content">
 	    <div id="map_canvas" style="width:100%;height:300px"></div>
+	    <form name="searchForm">
+	    	<fieldset class="ui-grid-a">
+	    		<div class="ui-block-a" style="width:75%">
+		        	<div data-role="fieldcontain" class="ui-hide-label" >
+	    				<label for="SearchField">Address:</label>
+		    			<input id="SearchField" name="SearchField" type="text"/>
+		    		</div>
+		    	</div>
+		    	<div class="ui-block-b" style="width:25%">
+		    		<input type="submit" value="Search" data-inline="true"/>
+		    	</div>
+		    </fieldset>
+        </form>
+        <a href="#" data-role="button" id="add-destination-button" data-inline="true">Add Destination</a>
       </div>
-      <a href="#" data-role="button" id="add-destination-button" data-inline="true">Add Destination</a>
     </div>
     <script type="text/javascript" src="destination-page.js"></script>
 
     <!-- Add Destination Popup-->
     <div data-role="page" id="add-destination-popup">
       <div data-role="header">
-        <h1>Destination</h1>
+	        <h1>Destination</h1>
       </div>
       <div data-role="content">
         <form name="add-destination-form">
-          <label>Destination</label><br>
-	      <input id="Lat" name="Lat" type="text" class="required"/>
-          <input id="Lng" name="Lng" type="text" class="required"/>
+	      <input id="Lat" name="Lat" type="hidden"/>
+          <input id="Lng" name="Lng" type="hidden"/>
+          <label for="Address">Address</label>          
+          <input id="Address" name="Address" type="text" class="required"/>
           <label for="Name">Name</label>
-          <input id="Name" name="Name" type="text"  class="required" minlength="2"/ value="Enter name...">
+          <input id="Name" name="Name" type="text"  class="required" minlength="2"/>
           <input type="submit" value="Save" data-inline="true"/>
           <a href="#" data-role="button" id="cancel-add-button" data-inline="true">Cancel</a>
         </form>
