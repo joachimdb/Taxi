@@ -37,7 +37,7 @@ function mapClicked(LatLng) {
 			$("form[name='add-destination-form'] input[name='Description']").val(results[1].formatted_address);
 		} else {
 			alert("Reverse geocode not successful: " + status);
-			$$("form[name='add-destination-form'] input[name='Address']").val("Enter Address");
+			$("form[name='add-destination-form'] input[name='Address']").val("Enter Address");
 			$("form[name='add-destination-form'] input[name='Description']").val("Enter Description");
 		}
 		$.mobile.changePage($("#add-destination-popup"), { transition: "pop", role: "dialog", reverse: false } );
