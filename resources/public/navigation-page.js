@@ -11,14 +11,15 @@ function initializeDirections() {
     var Options = {
 	  zoom: zoomLevel,
 	  mapTypeId: google.maps.MapTypeId.ROADMAP,
-	  center: currentLocation
+	  center: currentLocation.LatLng
     };
     navigationMap = new google.maps.Map(document.getElementById("navigation_map_canvas"), Options);
     directionsDisplay.setMap(navigationMap);
     directionsDisplay.setPanel(document.getElementById("navigation_panel"));
-    
-    var destinationLat = $("form[name='edit-destination-form'] input[name='Lat']").val();
-    var destinationLng = $("form[name='edit-destination-form'] input[name='Lng']").val();
+
+    var destinationLat = $("form[name='add-destination-form'] input[name='Lat']").val();
+    var destinationLng = $("form[name='add-destination-form'] input[name='Lng']").val();
+
     targetLocation = new google.maps.LatLng(destinationLat,destinationLng);
 }
 
@@ -41,7 +42,7 @@ function calcRoute(origin,destination) {
 $('#navigation-page').live('pageshow',function(event){
     $(function() {
     	initializeDirections();
-    	calcRoute(currentLocation,targetLocation);
+    	calcRoute(currentLocation.LatLng,targetLocation);
     	// for navigation: repeatedly check currentLocation and call calcRoute again
     })
 })

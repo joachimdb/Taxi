@@ -23,6 +23,11 @@ $("form[name='add-destination-form']").submit(function() {
     return false;
 });
 
+$('#start-navigation-button').click(
+		function(){
+			$.mobile.changePage($("#navigation-page"), { transition: "pop", role: "page", reverse: false } );
+		});
+		
 $('#delete-destination-button').click(
 	    function(){	
 		  $.post("/delete-location", $("form[name='add-destination-form']").serializeArray(), function(){

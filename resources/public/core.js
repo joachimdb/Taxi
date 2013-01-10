@@ -5,10 +5,8 @@ var markers = {};
 var zoomLevel = 10;
 var defaultMapTypeId = google.maps.MapTypeId.ROADMAP;
 var selectedDestination;
-var directionsDisplay;
-var noDestinations = true;
 
-var directionsService = new google.maps.DirectionsService();
+var noDestinations = true;
 
 var geocoder = new google.maps.Geocoder();
 
