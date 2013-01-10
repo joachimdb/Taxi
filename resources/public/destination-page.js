@@ -48,7 +48,7 @@ $("form[name='searchForm']").submit(function() {
     	    $("form[name='add-destination-form'] input[name='Lat']").val(latlng.lat());
     		$("form[name='add-destination-form'] input[name='Lng']").val(latlng.lng());
 			$("form[name='add-destination-form'] input[name='Address']").val(results[0].formatted_address);
-			$("form[name='add-destination-form'] input[name='Description']").val("Enter description...");
+			$("form[name='add-destination-form'] input[name='Description']").val("Enter description ...");
 		} else {
 			alert("geocode not successful: " + status);
 		}
