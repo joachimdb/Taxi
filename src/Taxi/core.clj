@@ -11,12 +11,6 @@
         [Taxi.usr-management :as user]
         [Taxi.location-management :as loc]))
 
-;; idea: show a map, an adress field, and some buttons
-;; clicking the map or a marker fills the adress field
-;; filling the adress field centers the map to the adress
-;; with buttons, a location can be saved and travel planning can be started
- 
-
 (ae/stop)
 
 (defn json-response [data & [status]]
