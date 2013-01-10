@@ -1,7 +1,7 @@
 var map;
+var currentLocation = {};
 var markers = {};
 
-var currentLocation = {};
 var zoomLevel = 10;
 var defaultMapTypeId = google.maps.MapTypeId.ROADMAP;
 var selectedDestination;
@@ -9,7 +9,9 @@ var directionsDisplay;
 var noDestinations = true;
 
 var directionsService = new google.maps.DirectionsService();
-	
+
+var geocoder = new google.maps.Geocoder();
+
 function setMap(center) {
     var Options = {
     		zoom: zoomLevel,
@@ -21,13 +23,28 @@ function setMap(center) {
     	mapClicked(event.latLng);
     });	
     directionsDisplay.setMap(map);
-    //directionsDisplay.setPanel(document.getElementById("directionsPanel"));
 }
 
 function mapClicked(LatLng) {
-    // move center of map to clicked position and go to add-destination-popup
-    map.panTo(LatLng)
-    $.mobile.changePage($("#add-destination-popup"), { transition: "pop", role: "dialog", reverse: false });
+    map.panTo(LatLng);
+    
+    $('#delete-destination-button').hide();
+    
+    $("form[name='add-destination-form'] input[name='Lat']").val(LatLng.lat());
+	$("form[name='add-destination-form'] input[name='Lng']").val(LatLng.lng());
+	
+	geocoder.geocode({'latLng': LatLng},function(results, status) {
+		if (status == google.maps.GeocoderStatus.OK) {
+			$("form[name='add-destination-form'] input[name='Address']").val(results[0].formatted_address);
+			$("form[name='add-destination-form'] input[name='Description']").val(results[1].formatted_address);
+		} else {
+			alert("Reverse geocode not successful: " + status);
+			$$("form[name='add-destination-form'] input[name='Address']").val("Enter Address");
+			$("form[name='add-destination-form'] input[name='Description']").val("Enter Description");
+		}
+		$.mobile.changePage($("#add-destination-popup"), { transition: "pop", role: "dialog", reverse: false } );
+	});
+	return false
 }
 
 function addMarker(ID,Lat,Lng,toMap) {
@@ -54,15 +71,17 @@ function deleteMarker(ID) {
     markers[ID].setMap(null);
     delete markers[ID];
 }
-				  
+
 function markerClicked(ID) {
     $.getJSON( '/get-location:'+ID,function(destination) {
-    	$("form[name='edit-destination-form'] input[name='id']").val(ID);
-    	$("form[name='edit-destination-form'] input[name='Lat']").val(destination.fields.Lat);
-    	$("form[name='edit-destination-form'] input[name='Lng']").val(destination.fields.Lng);
-    	$("form[name='edit-destination-form'] input[name='Name']").val(destination.fields.Name);
-    	// $('#delete-point-text').html(destination.fields.Name);
-    	$.mobile.changePage($("#edit-destination-popup"), { transition: "pop", role: "dialog", reverse: false } );
+    	$("form[name='add-destination-form'] input[name='id']").val(ID);
+    	$("form[name='add-destination-form'] input[name='Lat']").val(destination.fields.Lat);
+    	$("form[name='add-destination-form'] input[name='Lng']").val(destination.fields.Lng);
+    	$("form[name='add-destination-form'] input[name='Description']").val(destination.fields.Description);
+    	$("form[name='add-destination-form'] input[name='Address']").val(destination.fields.Address);
+    	// $('#delete-point-text').html(destination.fields.Description);
+    	$('#delete-destination-button').show();
+    	$.mobile.changePage($("#add-destination-popup"), { transition: "pop", role: "dialog", reverse: false } );
     })
 }
 
@@ -95,7 +114,6 @@ function setCurrentLocation (callback) {
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function (position) {
 			currentLocation.LatLng = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
-			var geocoder = new google.maps.Geocoder();
 			geocoder.geocode({'latLng': currentLocation.LatLng},function(results, status) {
 				if (status == google.maps.GeocoderStatus.OK) {
 					currentLocation.Address = results[0].formatted_address;

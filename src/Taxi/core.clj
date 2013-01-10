@@ -46,8 +46,8 @@
   (POST "/new-location" {params :params}
         (println "save-location: " params)
         (println "id: " (:id params)) 
-        (let [id (when (:id params)
-                   (Integer/parseInt (:id params)))
+        (let [id (try (Integer/parseInt (:id params))
+                   (catch Exception e nil))
               response (loc/save-location! id 
                                            (user/current-user-id)
                                            (dissoc params :id))]

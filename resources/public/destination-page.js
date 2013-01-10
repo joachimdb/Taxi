@@ -5,24 +5,22 @@ $( '#destination-page' ).live( 'pageshow',function(event){
     })
 })
 
-$('#add-destination-button').click(
-    function(){
-	$.mobile.changePage($("#add-destination-popup"), { transition: "pop", role: "dialog", reverse: false });
-    })
-
 $("form[name='searchForm']").submit(function() {
-    //$("form[name='search-form']").valid();
-    var geocoder = new google.maps.Geocoder();
-   geocoder.geocode({'address': $('#SearchField').val()},function(results, status) {
-			if (status == google.maps.GeocoderStatus.OK) {
-				$('#SearchField').val(results[0].formatted_address);
-				map.panTo(results[0].geometry.location);
-				map.setZoom(13);
-//				currentLocation.LatLng = 
-//				setMap(currentLocation.LatLng);
-				$.mobile.changePage($("#destination-page"), { transition: "pop", role: "page", reverse: false } );
-			} else {
-				alert("geocode not successful: " + status);
-			}});
-   return false;
+    $('#delete-destination-button').hide();
+    geocoder.geocode({'address': $('#SearchField').val()},function(results, status) {
+    	if (status == google.maps.GeocoderStatus.OK) {
+    		$('#SearchField').val(results[0].formatted_address);
+    		var latlng = results[0].geometry.location;
+    		map.panTo(latlng);
+    		map.setZoom(13);
+    	    $("form[name='add-destination-form'] input[name='Lat']").val(latlng.lat());
+    		$("form[name='add-destination-form'] input[name='Lng']").val(latlng.lng());
+			$("form[name='add-destination-form'] input[name='Address']").val(results[0].formatted_address);
+			$("form[name='add-destination-form'] input[name='Name']").val("Enter name...");
+		} else {
+			alert("geocode not successful: " + status);
+		}
+		$.mobile.changePage($("#add-destination-popup"), { transition: "pop", role: "dialog", reverse: false } );
+	});	
+	return false;
 });
