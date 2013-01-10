@@ -1,11 +1,14 @@
+var sugList = $("#suggestions");
+
 $( '#destination-page' ).live( 'pageshow',function(event){
     $(function() {
+    	sugList.html("");
+    	sugList.listview("refresh");
+    	
 	//setMap(currentLocation);
         // initialize();
     })
 })
-
-var sugList = $("#suggestions");
 
 $("#SearchField").on("input", function(e) {
 	var text = $(this).val();
@@ -31,8 +34,6 @@ $("#SearchField").on("input", function(e) {
 $(document).on("click", '[id^=searchResultItem]', function(event, ui) {
 	// How do I get to the result?
 	$("form[name='searchForm'] input[name='SearchField']").val($(this).attr('result'));
-	sugList.html("");
-	sugList.listview("refresh");
 	$("form[name='searchForm']").submit();
 });	
 
