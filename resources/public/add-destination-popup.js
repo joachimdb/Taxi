@@ -28,9 +28,9 @@ $('#start-navigation-button').click(
 			$.mobile.changePage($("#navigation-page"), { transition: "pop", role: "page", reverse: false } );
 		});
 
-$('#start-plan_trip-button').click(
+$('#start_plan_trip_button').click(
 		function(){
-			$.mobile.changePage($("#plan_trip-page"), { transition: "pop", role: "page", reverse: false } );
+			$.mobile.changePage($("#plan_trip_page"), { transition: "slide", role: "dialog", reverse: false } );
 		});
 
 

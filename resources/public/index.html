@@ -11,7 +11,6 @@
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDEmEr5JLthqPARRbnDEdxNvKqTt8LSRns&sensor=false">
     </script>
     <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js"></script>    
-    <script type="text/javascript" src="map.js"></script>
     <script type="text/javascript" src="core.js"></script>
   </head>
 
@@ -54,7 +53,7 @@
           <label for="Description">Description</label>
           <input id="Description" name="Description" type="text"  class="required" minlength="2"/>
           <a href="#navigation-page" data-role="button" id="start-navigation-button" data-inline="true">Go!</a>
-          <a href="#plan_trip-page" data-role="button" id="start-plan_trip-button" data-inline="true">Plan</a>
+          <a href="#plan_trip_page" data-role="button" id="start_plan_trip_button" data-inline="true">Plan</a>
           <input type="submit" value="Save" data-inline="true"/>
           <a href="#" data-role="button" id="delete-destination-button" data-inline="true">Delete</a>
         </form>
@@ -62,24 +61,65 @@
     </div>
     <script type="text/javascript" src="add-destination-popup.js"></script>
 
+
+    
     <!-- Navigation Page -->
     <div data-role="page" id="navigation-page">
       <div data-role="content">
 	    <div id="navigation_map_canvas" style="width:100%;height:200px">navigation_map_canvas</div>
-	    <div id="navigation_panel" style="width:100%;overflow:scroll"</div>
+	    <div id="navigation_panel" style="width:100%;overflow:scroll"></div>
       </div>
       <a href="#" data-role="button" id="cancel-navigation-button" data-inline="true">Cancel</a>
     </div>
     <script type="text/javascript" src="navigation-page.js"></script>
 
-    <!-- plan_trip Page -->
-    <div data-role="page" id="plan_trip-page">
+    <!-- Plan Trip Page -->
+    <div data-role="page" id="plan_trip_page">
       <div data-role="content">
-		Test
+        <form name="plan-trip-form">
+          <input id="trip_id" name="trip_id" type="hidden"/>
+          <input id="id_from" name="id_from" type="hidden"/>
+   	      <input id="Lat_from" name="Lat_from" type="hidden"/>
+          <input id="Lng_from" name="Lng_from" type="hidden"/>
+   	      <input id="id_to" name="id_from" type="hidden"/>
+   	      <input id="Lat_to" name="Lat_to" type="hidden"/>
+          <input id="Lng_to" name="Lng_to" type="hidden"/>
+	      
+	      
+	      <label for="address_from">From</label>          
+          <input id="address_from" name="address_from" type="text" class="required"/>
+          
+          <label for="address_to">To</label>
+          <fieldset class="ui-grid-a">
+	    		<div class="ui-block-a" style="width:80%">
+		        	<div data-role="fieldcontain">        
+                      <input id="address_to" name="address_to" type="text" class="required"/>		        	
+		    		</div>
+		    	</div>
+		    	<div class="ui-block-b" style="width:20%">
+		 	   	  <a href="#" data-role="button" id="change-to-button" data-inline="true">Map</a>
+		    	</div>
+		  </fieldset>          
+
+         <label for="trip_date">Date</label> 
+         <fieldset class="ui-grid-a">
+	    		<div class="ui-block-a" style="width:80%">
+		        	<div data-role="fieldcontain">         
+                      <input id="trip-date" name="trip-date" type="text" class="required"/>		        	
+		    		</div>
+		    	</div>
+		    	<div class="ui-block-b" style="width:20%">
+		 	   	  <a href="#" data-role="button" id="change-date-button" data-inline="true">Calendar</a>
+		    	</div>
+		  </fieldset>   
+          <input type="submit" value="Save" data-inline="true"/>
+          <a href="#" data-role="button" id="cancel_plan_trip_button" data-inline="true">Cancel</a>
+       </form>
       </div>
-      <a href="#" data-role="button" id="cancel-plan_trip-button" data-inline="true">Cancel</a>
+
     </div>
-    <script type="text/javascript" src="plan_trip-page.js"></script>
+    <script type="text/javascript" src="plan_trip_page.js"></script>
+    
   </body>
 </html>
 
