@@ -27,7 +27,13 @@ $('#start-navigation-button').click(
 		function(){
 			$.mobile.changePage($("#navigation-page"), { transition: "pop", role: "page", reverse: false } );
 		});
-		
+
+$('#start-plan_trip-button').click(
+		function(){
+			$.mobile.changePage($("#plan_trip-page"), { transition: "pop", role: "page", reverse: false } );
+		});
+
+
 $('#delete-destination-button').click(
 	    function(){	
 		  $.post("/delete-location", $("form[name='add-destination-form']").serializeArray(), function(){
@@ -39,7 +45,6 @@ $('#delete-destination-button').click(
 	    })
 	    
 $('#cancel-add-button').click(
-    function(){
-        $.mobile.changePage($("#destination-page"), { transition: "pop", role: "page", reverse: false } );
-    });
-
+		function(){
+			$.mobile.changePage($("#destination-page"), { transition: "pop", role: "page", reverse: false } );
+		});

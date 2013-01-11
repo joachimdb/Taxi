@@ -69,7 +69,3 @@
 
 (ae/serve taxi-app)
 
-(comment
-  (ae/serve taxi-app)
-  (ae/stop)
-  )
