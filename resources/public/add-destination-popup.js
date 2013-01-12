@@ -25,11 +25,19 @@ $("form[name='add-destination-form']").submit(function() {
 
 $('#start-navigation-button').click(
 		function(){
+			var now=new Date();
 			$.mobile.changePage($("#navigation-page"), { transition: "pop", role: "page", reverse: false } );
 		});
 
 $('#start_plan_trip_button').click(
 		function(){
+			$("form[name='plan-trip-form'] input[name='address_from']").val(currentLocation.Address);
+			$("form[name='plan-trip-form'] input[name='Lat_from']").val(currentLocation.LatLng.lat());
+			$("form[name='plan-trip-form'] input[name='Lng_from']").val(currentLocation.LatLng.lng());			
+			$("form[name='plan-trip-form'] input[name='id_to']").val($("form[name='add-destination-form'] input[name='id']").val());
+			$("form[name='plan-trip-form'] input[name='address_to']").val($("form[name='add-destination-form'] input[name='Address']").val());
+			$("form[name='plan-trip-form'] input[name='Lat_to']").val($("form[name='add-destination-form'] input[name='Lat']").val());
+			$("form[name='plan-trip-form'] input[name='Lng_to']").val($("form[name='add-destination-form'] input[name='Lng']").val());
 			$.mobile.changePage($("#plan_trip_page"), { transition: "slide", role: "dialog", reverse: false } );
 		});
 

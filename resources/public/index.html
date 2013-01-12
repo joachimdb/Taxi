@@ -5,6 +5,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <link rel="stylesheet" href="http://code.jquery.com/mobile/latest/jquery.mobile.min.css" />
+    <link rel="stylesheet" type="text/css" href="http://dev.jtsage.com/cdn/datebox/latest/jqm-datebox.min.css" /> 
+    
     <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script type="text/javascript" src="http://code.jquery.com/mobile/latest/jquery.mobile.min.js"></script>
     <script type="text/javascript"
@@ -12,6 +14,11 @@
     </script>
     <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js"></script>    
     <script type="text/javascript" src="core.js"></script>
+    
+    <script type="text/javascript" src="http://dev.jtsage.com/cdn/datebox/latest/jqm-datebox.core.min.js"></script>
+	<script type="text/javascript" src="http://dev.jtsage.com/cdn/datebox/latest/jqm-datebox.mode.calbox.min.js"></script>
+	<script type="text/javascript" src="http://dev.jtsage.com/cdn/datebox/i18n/jquery.mobile.datebox.i18n.en_US.utf8.js"></script>
+	<script type="text/javascript" src="http://dev.jtsage.com/cdn/datebox/latest/jqm-datebox.mode.datebox.min.js"></script>
   </head>
 
   <body  onload="initialize()">
@@ -41,7 +48,7 @@
     <!-- Add Destination Popup-->
     <div data-role="page" id="add-destination-popup">
       <div data-role="header">
-	        <h1>Destination</h1>
+	        <h1>Dag Myrthe!</h1>
       </div>
       <div data-role="content">
         <form name="add-destination-form">
@@ -75,46 +82,34 @@
 
     <!-- Plan Trip Page -->
     <div data-role="page" id="plan_trip_page">
+      <div data-role="header">
+	     <h1>Trip</h1>
+      </div>
       <div data-role="content">
         <form name="plan-trip-form">
-          <input id="trip_id" name="trip_id" type="hidden"/>
-          <input id="id_from" name="id_from" type="hidden"/>
-   	      <input id="Lat_from" name="Lat_from" type="hidden"/>
-          <input id="Lng_from" name="Lng_from" type="hidden"/>
-   	      <input id="id_to" name="id_from" type="hidden"/>
-   	      <input id="Lat_to" name="Lat_to" type="hidden"/>
-          <input id="Lng_to" name="Lng_to" type="hidden"/>
+          <input id="trip_id" name="trip_id"/>
+          <input id="id_from" name="id_from" class="required"/>
+   	      <input id="Lat_from" name="Lat_from" class="required"/>
+          <input id="Lng_from" name="Lng_from" class="required"/>
+   	      <input id="id_to" name="id_to"/>
+   	      <input id="Lat_to" name="Lat_to" class="required"/>
+          <input id="Lng_to" name="Lng_to" class="required"/>
 	      
-	      
-	      <label for="address_from">From</label>          
-          <input id="address_from" name="address_from" type="text" class="required"/>
-          
-          <label for="address_to">To</label>
-          <fieldset class="ui-grid-a">
-	    		<div class="ui-block-a" style="width:80%">
-		        	<div data-role="fieldcontain">        
-                      <input id="address_to" name="address_to" type="text" class="required"/>		        	
-		    		</div>
-		    	</div>
-		    	<div class="ui-block-b" style="width:20%">
-		 	   	  <a href="#" data-role="button" id="change-to-button" data-inline="true">Map</a>
-		    	</div>
-		  </fieldset>          
+	      <label for="address_to">Destination</label>          
+          <input id="address_to" name="address_to" type="text" class="required"/>
 
-         <label for="trip_date">Date</label> 
-         <fieldset class="ui-grid-a">
-	    		<div class="ui-block-a" style="width:80%">
-		        	<div data-role="fieldcontain">         
-                      <input id="trip-date" name="trip-date" type="text" class="required"/>		        	
-		    		</div>
-		    	</div>
-		    	<div class="ui-block-b" style="width:20%">
-		 	   	  <a href="#" data-role="button" id="change-date-button" data-inline="true">Calendar</a>
-		    	</div>
-		  </fieldset>   
+          <label for="trip_date">Arrival date</label>
+		  <input name="trip_date" id="trip_date" type="date" data-role="datebox" data-options='{"mode": "calbox"}' class="required"/>
+		 
+		  <label for="mydate">Arrival time</label>
+		  <input name="trip-time" id="trip-time" type="date" data-role="datebox" data-options='{"mode": "timebox"}' class="required"/>		          
+          
+          <label for="address_from">From</label>
+          <input id="address_from" name="address_from" type="text" class="required"/>		        	
+	      <ul id="suggestions_from" data-role="listview" data-inset="true"></ul>
           <input type="submit" value="Save" data-inline="true"/>
-          <a href="#" data-role="button" id="cancel_plan_trip_button" data-inline="true">Cancel</a>
-       </form>
+          <a href="#" data-role="button" id="cancel-plan-trip-button" data-inline="true">Cancel</a>
+	    </form>
       </div>
 
     </div>
