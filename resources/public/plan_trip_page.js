@@ -31,6 +31,15 @@ $("#address_from").on("input", function(e) {
 	}
 });
 
+$("form[name='plan-trip-form']").submit(function() {
+	$("form[name='plan-trip-form']").valid();
+	if ($("form[name='plan-trip-form']").validate().numberOfInvalids()==0) {
+		$.post("/new-trip", $("form[name='plan-trip-form']").serializeArray(), function(data){
+			$.mobile.changePage($("#destination-page"), { transition: "pop", role: "page", reverse: false } );
+		});
+	}
+});
+
 $(document).on("click", '[id^=fromItem]', function(event, ui) {
 	fromList.html("");
 	fromList.listview("refresh");

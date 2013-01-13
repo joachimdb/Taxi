@@ -9,7 +9,8 @@
         [ring.util.response :as ring-response]
         [compojure.handler :as comp-handler]
         [Taxi.usr-management :as user]
-        [Taxi.location-management :as loc]))
+        [Taxi.location-management :as loc]
+        [Taxi.trip-management :as trip]))
 
 (ae/stop)
 
@@ -40,7 +41,7 @@
   (POST "/new-location" {params :params}
         (println "save-location: " params)
         (println "id: " (:id params)) 
-        (let [id (try (Integer/parseInt (:id params))
+        (let [id (try (Integer/parseInt(:id params))
                    (catch Exception e nil))
               response (loc/save-location! id 
                                            (user/current-user-id)
@@ -48,6 +49,22 @@
           (println "resp: " response)
           (json-response response)))
   
+  (POST "/new-trip" {params :params}
+        (println "save-trip: " params)
+        (let [id (try (Integer/parseInt (:id params))
+                   (catch Exception e nil))
+              response (trip/save-trip! id 
+                                        (user/current-user-id)
+                                        (:trip_date params) 
+                                        (:trip-time params)
+                                        (Float/parseFloat (:Lat_from params))
+                                        (Float/parseFloat (:Lng_from params))
+                                        (Float/parseFloat (:Lat_to params))
+                                        (Float/parseFloat (:Lng_to params))
+                                        (dissoc params :id :trip_date :trip-time :Lat-from :Lng-from :Lat-to :Lng-to))]
+          (println "resp: " response)
+          (json-response response)))
+
   (GET "/get-location:id" [id]
         (if-let [id-string (re-matches #":[0-9]+" id)]
            (json-response (loc/get-location (Integer/parseInt (apply str (drop 1 id-string)))))))
