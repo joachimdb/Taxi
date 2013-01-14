@@ -46,10 +46,10 @@ $("form[name='search_form']").submit(function() {
     	    $("form[name='plan_trip_form'] input[name='addressTo']").val(results[0].formatted_address);
     	    $("form[name='plan_trip_form'] input[name='latTo']").val(latlng.lat());
     	    $("form[name='plan_trip_form'] input[name='lngTo']").val(latlng.lng());
-	} else {
-	    alert("geocode not successful: " + status);
-	}
-    $.mobile.changePage($("#plan_trip_page"), { transition: "pop", role: "dialog", reverse: false } );
-    });	
-    return false;
+    	} else {
+    		alert("geocode not successful: " + status);
+    	}
+    	$.mobile.changePage($("#plan_trip_page"), { transition: "pop", role: "dialog", reverse: false } );
+	});	
+	return false;
 });

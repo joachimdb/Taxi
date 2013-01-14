@@ -4,8 +4,24 @@ $( '#plan_trip_page' ).live( 'pageshow',function(event){
     $(function() {
     	fromList.html("");
     	fromList.listview("refresh")
-    })
-})
+    	
+    	var now = new Date();
+    	var day = now.getDate();
+    	if(day<10){day="0"+day} else {day = ""+day}
+    	var month = (1+now.getMonth());
+    	if(month<10){month="0"+month} else {month = ""+month}
+    	var hours = now.getHours();
+    	if(hours<10){hours="0"+hours} else {hours = ""+hours}
+    	var minutes = now.getMinutes();
+    	if(minutes<10){minutes="0"+minutes} else {minutes = ""+minutes}
+    	var date_formatted = day+"/"+month+"/"+now.getFullYear(); 
+    	var time_formatted = hours+":"+minutes;
+    	$("form[name='plan_trip_form'] input[name='tripDate']").val(date_formatted);
+    	$("form[name='plan_trip_form'] input[name='tripTime']").val(time_formatted);
+    	$("form[name='plan_trip_form'] input[name='tripDate']").datebox('setTheDate',now);
+    	$("form[name='plan_trip_form'] input[name='tripTime']").datebox('setTheDate',now);
+    });
+});
 
 $("#addressFrom").on("input", function(e) {
 	var text = $(this).val();

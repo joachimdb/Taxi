@@ -64,10 +64,10 @@
           <input id="addressTo" name="addressTo" type="text" class="required"/>
 	  
           <label for="tripDate">Arrival date</label>
-	      <input name="tripDate" id="tripDate" type="date" data-role="datebox" data-options='{"mode": "calbox"}' class="required"/>
+	      <input name="tripDate" id="tripDate" type="date" data-role="datebox" data-options='{"mode": "calbox", "overrideDateFormat":"%d/%m/%Y"}' class="required"/>
 	  
 	      <label for="tripTime">Arrival time</label>
-	      <input name="tripTime" id="tripTime" type="date" data-role="datebox" data-options='{"mode": "timebox"}' class="required"/>		          
+	      <input name="tripTime" id="tripTime" type="date" data-role="datebox" data-options='{"mode": "timebox", "overrideTimeFormat": 24, "overrideTimeOutput":"%k:%M"}' class="required"/>		          
           
 	      <label for="addressFrom">From</label>
           <input id="addressFrom" name="addressFrom" type="text" class="required"/>		        	
