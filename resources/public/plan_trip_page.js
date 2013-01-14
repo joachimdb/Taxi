@@ -54,7 +54,7 @@ $("form[name='plan_trip_form']").submit(function() {
 	var to = new google.maps.LatLng($("form[name='plan_trip_form'] input[name='latTo']").val(),$("form[name='plan_trip_form'] input[name='lngTo']").val());
 
 	computeDirections(from, to, function(directions){
-		alert(directions.routes[0]);
+		//alert(directions.routes[0]);
 		$("form[name='plan_trip_form'] input[name='directions']").val(directions);
 		$("form[name='plan_trip_form']").valid();
 		if ($("form[name='plan_trip_form']").validate().numberOfInvalids()==0) {
