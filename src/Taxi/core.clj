@@ -9,7 +9,6 @@
         [ring.util.response :as ring-response]
         [compojure.handler :as comp-handler]
         [Taxi.usr-management :as user]
-        [Taxi.location-management :as loc]
         [Taxi.trip-management :as trip]))
 
 (ae/stop)
@@ -38,44 +37,29 @@
   (GET "/users" []
        (json-response (user/get-all-users)))
   
-  (POST "/new-location" {params :params}
-        (println "save-location: " params)
-        (println "id: " (:id params)) 
-        (let [id (try (Integer/parseInt(:id params))
-                   (catch Exception e nil))
-              response (loc/save-location! id 
-                                           (user/current-user-id)
-                                           (dissoc params :id))]
-          (println "resp: " response)
-          (json-response response)))
-  
-  (POST "/new-trip" {params :params}
+  (POST "/new_trip" {params :params}
         (println "save-trip: " params)
-        (let [id (try (Integer/parseInt (:id params))
+        (let [id (try (Integer/parseInt (:tripId params))
                    (catch Exception e nil))
               response (trip/save-trip! id 
                                         (user/current-user-id)
-                                        (:trip_date params) 
-                                        (:trip-time params)
-                                        (Float/parseFloat (:Lat_from params))
-                                        (Float/parseFloat (:Lng_from params))
-                                        (Float/parseFloat (:Lat_to params))
-                                        (Float/parseFloat (:Lng_to params))
-                                        (dissoc params :id :trip_date :trip-time :Lat-from :Lng-from :Lat-to :Lng-to))]
+                                        (:tripDate params) 
+                                        (:tripTime params)
+                                        (Float/parseFloat (:latFrom params))
+                                        (Float/parseFloat (:lngFrom params))
+                                        (:addressFrom params)
+                                        (Float/parseFloat (:latTo params))
+                                        (Float/parseFloat (:lngTo params))
+                                        (:addressTo params))]
           (println "resp: " response)
           (json-response response)))
-
-  (GET "/get-location:id" [id]
+  
+(GET "/trip:id" [id]
         (if-let [id-string (re-matches #":[0-9]+" id)]
-           (json-response (loc/get-location (Integer/parseInt (apply str (drop 1 id-string)))))))
+           (json-response (trip/get-trip (Integer/parseInt (apply str (drop 1 id-string)))))))
   
-  (POST "/delete-location" {params :params} 
-        (println "delete-location: " params)
-        (json-response (loc/delete-location (Integer/parseInt (:id params))
-                                            (user/current-user-id))))
-  
-  (GET "/locations" []
-       (json-response (loc/get-all-locations)))
+(GET "/trips" []
+       (json-response (trip/find-trips {:owner (user/current-user-id)})))
   
   (route/resources "/")
   (route/not-found "Page not found"))

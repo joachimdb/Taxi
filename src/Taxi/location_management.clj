@@ -1,7 +1,7 @@
 (ns Taxi.location-management
   (:require [appengine-magic.services.datastore :as ds]))
 
-(ds/defentity Loc [^{:tag :key} id, owner, ^{:tag :clj} fields])
+(ds/defentity Loc [, owner, ^{:tag :clj} fields])
             
 (defn save-location! 
   ([user fields]

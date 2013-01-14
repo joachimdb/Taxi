@@ -4,10 +4,6 @@ var markers = {};
 
 var zoomLevel = 10;
 var defaultMapTypeId = google.maps.MapTypeId.ROADMAP;
-var selectedDestination;
-
-var noDestinations = true;
-
 var geocoder = new google.maps.Geocoder();
 
 function setMap(center) {
@@ -20,37 +16,32 @@ function setMap(center) {
     google.maps.event.addListener(map, 'click', function(event) {
     	mapClicked(event.latLng);
     });	
-    directionsDisplay.setMap(map);
 }
 
-function mapClicked(LatLng) {
-    map.panTo(LatLng);
-    
-    $('#delete-destination-button').hide();
-    
-    $("form[name='add-destination-form'] input[name='Lat']").val(LatLng.lat());
-	$("form[name='add-destination-form'] input[name='Lng']").val(LatLng.lng());
-	
-	geocoder.geocode({'latLng': LatLng},function(results, status) {
-		if (status == google.maps.GeocoderStatus.OK) {
-			$("form[name='add-destination-form'] input[name='Address']").val(results[0].formatted_address);
-			$("form[name='add-destination-form'] input[name='Description']").val(results[1].formatted_address);
-		} else {
-			alert("Reverse geocode not successful: " + status);
-			$("form[name='add-destination-form'] input[name='Address']").val("Enter Address");
-			$("form[name='add-destination-form'] input[name='Description']").val("Enter Description");
-		}
-		$.mobile.changePage($("#add-destination-popup"), { transition: "pop", role: "dialog", reverse: false } );
-	});
-	return false
+function mapClicked(latlng) {
+    map.panTo(latlng);
+    geocoder.geocode({'latLng': latlng},function(results, status) {
+    	if (status == google.maps.GeocoderStatus.OK) {
+    		$("form[name='plan_trip_form'] input[name='addressFrom']").val(currentLocation.Address);
+    		$("form[name='plan_trip_form'] input[name='latFrom']").val(currentLocation.latlng.lat());
+    		$("form[name='plan_trip_form'] input[name='lngFrom']").val(currentLocation.latlng.lng());			
+    		$("form[name='plan_trip_form'] input[name='addressTo']").val(results[0].formatted_address);
+    		$("form[name='plan_trip_form'] input[name='latTo']").val(latlng.lat());
+    		$("form[name='plan_trip_form'] input[name='lngTo']").val(latlng.lng());
+    	} else {
+    	    alert("Reverse geocode not successful: " + status);
+    	    $("form[name='plan_trip_form'] input[name='addressTo']").val("Enter Address");
+    	}
+	$.mobile.changePage($("#plan_trip_page"), { transition: "pop", role: "dialog", reverse: false } );
+    });
+    return false
 }
 
 function addMarker(ID,Lat,Lng,toMap) {
     var marker = new google.maps.Marker({
-  	               position: new google.maps.LatLng(Lat,Lng),
-	               map: toMap
-	               // draggable: true
-                 });
+  	position: new google.maps.LatLng(Lat,Lng),
+	map: toMap
+    });
     markers[ID]=marker;
     google.maps.event.addListener(marker, 'click', function() {
     	markerClicked(ID);
@@ -71,48 +62,32 @@ function deleteMarker(ID) {
 }
 
 function markerClicked(ID) {
-    $.getJSON( '/get-location:'+ID,function(destination) {
-    	$("form[name='add-destination-form'] input[name='id']").val(ID);
-    	$("form[name='add-destination-form'] input[name='Lat']").val(destination.fields.Lat);
-    	$("form[name='add-destination-form'] input[name='Lng']").val(destination.fields.Lng);
-    	$("form[name='add-destination-form'] input[name='Description']").val(destination.fields.Description);
-    	$("form[name='add-destination-form'] input[name='Address']").val(destination.fields.Address);
-    	// $('#delete-point-text').html(destination.fields.Description);
-    	$('#delete-destination-button').show();
-    	$.mobile.changePage($("#add-destination-popup"), { transition: "pop", role: "dialog", reverse: false } );
+	$.getJSON( '/trip:'+ID,function(trip) {
+    	$("form[name='plan_trip_form'] input[name='addressFrom']").val(currentLocation.Address);
+//    	$("form[name='plan_trip_form'] input[name='latFrom']").val(currentLocation.latlng.lat());
+//    	$("form[name='plan_trip_form'] input[name='lngFrom']").val(currentLocation.latlng.lng());			
+    	$("form[name='plan_trip_form'] input[name='addressFrom']").val(trip.addressFrom);
+    	$("form[name='plan_trip_form'] input[name='latFrom']").val(trip.latFrom);
+    	$("form[name='plan_trip_form'] input[name='lngFrom']").val(trip.lngFrom);
+    	$("form[name='plan_trip_form'] input[name='addressTo']").val(trip.addressTo);
+    	$("form[name='plan_trip_form'] input[name='latTo']").val(trip.latTo);
+    	$("form[name='plan_trip_form'] input[name='lngTo']").val(trip.lngTo);
+    	$.mobile.changePage($("#plan_trip_page"), { transition: "pop", role: "dialog", reverse: false } );
     })
 }
 
 function initMarkers(toMap) {
-    $.getJSON( '/locations',
-               function(data) {
-		   noDestinations = (data.length == 0 );
-		   $.each(data, function(i, destination) {		
-		       addMarker(destination.id,
-		    		   	 destination.fields.Lat,
-		    		   	 destination.fields.Lng,
-		    		   	 toMap)
-		       //showMarker(destination.destinationId)
-		   })})
+	$.getJSON( '/trips', function(data) {
+		$.each(data, function(i, trip) {
+			addMarker(trip.id,trip.latTo,trip.lngTo,toMap);
+		});});
 }
-
-//function getAddress (latlng) {	
-//var geocoder = new google.maps.Geocoder();	
-//
-//geocoder.geocode({'latLng': latlng}, function(results, status) {
-//	if (status == google.maps.GeocoderStatus.OK) {
-//		results[0].formatted_address;
-//	} else {
-//		alert("Geocoder failed due to: " + status);
-//	}
-//})
-//}
 
 function setCurrentLocation (callback) {
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function (position) {
-			currentLocation.LatLng = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
-			geocoder.geocode({'latLng': currentLocation.LatLng},function(results, status) {
+			currentLocation.latlng = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+			geocoder.geocode({'latLng': currentLocation.latlng},function(results, status) {
 				if (status == google.maps.GeocoderStatus.OK) {
 					currentLocation.Address = results[0].formatted_address;
 					callback();
@@ -121,7 +96,7 @@ function setCurrentLocation (callback) {
 					callback();
 				}})
 		}, function (error) {
-        	currentLocation.LatLng = new google.maps.LatLng(51.03,13.43);
+        	currentLocation.latlng = new google.maps.LatLng(51.03,13.43);
         	switch(error.code) 
         	{
         	case error.TIMEOUT:
@@ -145,25 +120,9 @@ function setCurrentLocation (callback) {
 }
 
 function initialize () {
-    directionsDisplay = new google.maps.DirectionsRenderer();
-    setCurrentLocation(function () {
-    	setMap(currentLocation.LatLng);
+	setCurrentLocation(function () {
+    	setMap(currentLocation.latlng);
     	initMarkers(map);
-    	$('#SearchField').val(currentLocation.Address);
-      })
+    	$('#searchField').val(currentLocation.Address);
+    });
 }
-
-// function calcRoute() {
-//     var start = document.getElementById("start").value;
-//     var end = document.getElementById("end").value;
-//     var request = {
-// 	origin:start,
-// 	destination:end,
-// 	travelMode: google.maps.TravelMode.DRIVING
-//     };
-//     directionsService.route(request, function(response, status) {
-// 	if (status == google.maps.DirectionsStatus.OK) {
-// 	    directionsDisplay.setDirections(response);
-// 	}
-//     });
-// }

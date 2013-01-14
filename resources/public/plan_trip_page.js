@@ -3,11 +3,11 @@ var fromList = $("#suggestions_from");
 $( '#plan_trip_page' ).live( 'pageshow',function(event){
     $(function() {
     	fromList.html("");
-    	fromList.listview("refresh");
+    	fromList.listview("refresh")
     })
 })
 
-$("#address_from").on("input", function(e) {
+$("#addressFrom").on("input", function(e) {
 	var text = $(this).val();
 	if(text.length < 1) {
 		fromList.html("");
@@ -31,11 +31,13 @@ $("#address_from").on("input", function(e) {
 	}
 });
 
-$("form[name='plan-trip-form']").submit(function() {
-	$("form[name='plan-trip-form']").valid();
-	if ($("form[name='plan-trip-form']").validate().numberOfInvalids()==0) {
-		$.post("/new-trip", $("form[name='plan-trip-form']").serializeArray(), function(data){
-			$.mobile.changePage($("#destination-page"), { transition: "pop", role: "page", reverse: false } );
+$("form[name='plan_trip_form']").submit(function() {
+	$("form[name='plan_trip_form'] input[name='mode']").val("offering");
+	$("form[name='plan_trip_form']").valid();
+	if ($("form[name='plan_trip_form']").validate().numberOfInvalids()==0) {
+		$.post("/new_trip", $("form[name='plan_trip_form']").serializeArray(), function(data){
+			addMarker(data.id,data.latTo,data.lngTo,map);
+			$.mobile.changePage($("#destination_page"), { transition: "pop", role: "page", reverse: false } );
 		});
 	}
 });
@@ -43,13 +45,24 @@ $("form[name='plan-trip-form']").submit(function() {
 $(document).on("click", '[id^=fromItem]', function(event, ui) {
 	fromList.html("");
 	fromList.listview("refresh");
-	$("form[name='plan-trip-form'] input[name='address_from']").val($(this).attr('address'));
-	$("form[name='plan-trip-form'] input[name='Lat_from']").val($(this).attr('lat'));
-	$("form[name='plan-trip-form'] input[name='Lng_from']").val($(this).attr('lng'));
+	$("form[name='plan_trip_form'] input[name='addressFrom']").val($(this).attr('address'));
+	$("form[name='plan_trip_form'] input[name='latFrom']").val($(this).attr('lat'));
+	$("form[name='plan_trip_form'] input[name='lngFrom']").val($(this).attr('lng'));
 });	
 
-$('#cancel-plan-trip-button').click(
+$('#search_ride_button').click(function(){
+	$("form[name='plan_trip_form'] input[name='mode']").val("searching");
+	$("form[name='plan_trip_form']").valid();
+	if ($("form[name='plan_trip_form']").validate().numberOfInvalids()==0) {
+		$.post("/new_trip", $("form[name='plan_trip_form']").serializeArray(), function(data){
+			addMarker(data.id,data.latTo,data.lngTo,map);
+			$.mobile.changePage($("#destination_page"), { transition: "pop", role: "page", reverse: false } );
+		});
+	}});
+
+
+$('#cancel_plan_trip_button').click(
     function(){
-    	$.mobile.changePage($("#destination-page"), { transition: "pop", role: "page", reverse: false } );
+    	$.mobile.changePage($("#destination_page"), { transition: "pop", role: "page", reverse: false } );
     });
 

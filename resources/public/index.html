@@ -22,96 +22,61 @@
   </head>
 
   <body  onload="initialize()">
-	
-    <!-- Destinations Page -->
-    <div data-role="page" id="destination-page">
-	  <div data-role="content">
-	    <div id="map_canvas" style="width:100%;height:300px"></div>
-	    <form name="searchForm">
-	    	<fieldset class="ui-grid-a">
-	    		<div class="ui-block-a" style="width:100%">
-		        	<div data-role="fieldcontain" class="ui-hide-label" >
-	    				<label for="SearchField">Address:</label>
-		    			<input id="SearchField" name="SearchField" type="text"/>
-		    		</div>
-		    	</div>
-		    	<div class="ui-block-b" style="width:0%">
-		    		<input type="submit" value="Search" data-inline="true"/>
-		    	</div>
-		    </fieldset>
-        </form>
-		<ul id="suggestions" data-role="listview" data-inset="true"></ul>
-      </div>
-    </div>
-    <script type="text/javascript" src="destination-page.js"></script>
-
-    <!-- Add Destination Popup-->
-    <div data-role="page" id="add-destination-popup">
-      <div data-role="header">
-	        <h1>Dag Myrthe!</h1>
-      </div>
-      <div data-role="content">
-        <form name="add-destination-form">
-          <input id="id" name="id" type="hidden"/>
-   	      <input id="Lat" name="Lat" type="hidden"/>
-          <input id="Lng" name="Lng" type="hidden"/>
-          <label for="Address">Address</label>          
-          <input id="Address" name="Address" type="text" class="required"/>
-          <label for="Description">Description</label>
-          <input id="Description" name="Description" type="text"  class="required" minlength="2"/>
-          <a href="#navigation-page" data-role="button" id="start-navigation-button" data-inline="true">Go!</a>
-          <a href="#plan_trip_page" data-role="button" id="start_plan_trip_button" data-inline="true">Plan</a>
-          <input type="submit" value="Save" data-inline="true"/>
-          <a href="#" data-role="button" id="delete-destination-button" data-inline="true">Delete</a>
-        </form>
-      </div>
-    </div>
-    <script type="text/javascript" src="add-destination-popup.js"></script>
-
-
     
-    <!-- Navigation Page -->
-    <div data-role="page" id="navigation-page">
+    <!-- Destinations Page -->
+    <div data-role="page" id="destination_page">
       <div data-role="content">
-	    <div id="navigation_map_canvas" style="width:100%;height:200px">navigation_map_canvas</div>
-	    <div id="navigation_panel" style="width:100%;overflow:scroll"></div>
-      </div>
-      <a href="#" data-role="button" id="cancel-navigation-button" data-inline="true">Cancel</a>
-    </div>
-    <script type="text/javascript" src="navigation-page.js"></script>
+	    <div id="map_canvas" style="width:100%;height:300px"></div>
+	    <form name="search_form">
+	      <fieldset class="ui-grid-a">
+	        <div class="ui-block-a" style="width:100%">
+	          <div data-role="fieldcontain" class="ui-hide-label" >
+	            <label for="searchField">Address:</label>
+		        <input id="searchField" name="searchField" type="text"/>
+	          </div>
+	        </div>
+	        <div class="ui-block-b" style="width:0%">
+	          <input type="submit" value="Search" data-inline="true"/>
+	        </div>
+	      </fieldset>
+        </form>
+	    <ul id="suggestions" data-role="listview" data-inset="true"></ul>
+	  </div>
+	</div>
+    <script type="text/javascript" src="destination_page.js"></script>
 
     <!-- Plan Trip Page -->
     <div data-role="page" id="plan_trip_page">
       <div data-role="header">
-	     <h1>Trip</h1>
+	    <h1>Trip</h1>
       </div>
       <div data-role="content">
-        <form name="plan-trip-form">
-          <input id="trip_id" name="trip_id" type="hidden"/>
-          <input id="id_from" name="id_from" type="hidden" class="required"/>
-   	      <input id="Lat_from" name="Lat_from" type="hidden" class="required"/>
-          <input id="Lng_from" name="Lng_from" type="hidden" class="required"/>
-   	      <input id="id_to" name="id_to" type="hidden"/>
-   	      <input id="Lat_to" name="Lat_to" type="hidden" class="required"/>
-          <input id="Lng_to" name="Lng_to" type="hidden" class="required"/>
-	      
-	      <label for="address_to">Destination</label>          
-          <input id="address_to" name="address_to" type="text" class="required"/>
-
-          <label for="trip_date">Arrival date</label>
-		  <input name="trip_date" id="trip_date" type="date" data-role="datebox" data-options='{"mode": "calbox"}' class="required"/>
-		 
-		  <label for="trip-time">Arrival time</label>
-		  <input name="trip-time" id="trip-time" type="date" data-role="datebox" data-options='{"mode": "timebox"}' class="required"/>		          
+        <form name="plan_trip_form">
+          <input id="mode" name="mode" type="hidden">
+          <!-- <input id="id_from" name="id_from" type="hidden" class="required"/> -->
+   	      <input id="latFrom" name="latFrom" type="hidden" class="required"/>
+          <input id="lngFrom" name="lngFrom" type="hidden" class="required"/>
+   	      <!-- <input id="id_to" name="id_to" type="hidden"/> -->
+   	      <input id="latTo" name="latTo" type="hidden" class="required"/>
+          <input id="lngTo" name="lngTo" type="hidden" class="required"/>
+	  
+	      <label for="addressTo">Destination</label>          
+          <input id="addressTo" name="addressTo" type="text" class="required"/>
+	  
+          <label for="tripDate">Arrival date</label>
+	      <input name="tripDate" id="tripDate" type="date" data-role="datebox" data-options='{"mode": "calbox"}' class="required"/>
+	  
+	      <label for="tripTime">Arrival time</label>
+	      <input name="tripTime" id="tripTime" type="date" data-role="datebox" data-options='{"mode": "timebox"}' class="required"/>		          
           
-          <label for="address_from">From</label>
-          <input id="address_from" name="address_from" type="text" class="required"/>		        	
+	      <label for="addressFrom">From</label>
+          <input id="addressFrom" name="addressFrom" type="text" class="required"/>		        	
 	      <ul id="suggestions_from" data-role="listview" data-inset="true"></ul>
-          <input type="submit" value="Save" data-inline="true"/>
-          <a href="#" data-role="button" id="cancel-plan-trip-button" data-inline="true">Cancel</a>
+          <input type="submit" value="Offer" data-inline="true"/>
+          <a href="#" data-role="button" id="search_ride_button" data-inline="true">Search</a>
+	      <a href="#" data-role="button" id="cancel_plan_trip_button" data-inline="true">Cancel</a>
 	    </form>
       </div>
-
     </div>
     <script type="text/javascript" src="plan_trip_page.js"></script>
     
