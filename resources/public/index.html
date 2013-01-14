@@ -28,8 +28,8 @@
       <div data-role="header" data-id="global_navbar" data-position="fixed">
 	    <div data-role=navbar>
 	      <ul>
-	        <li><a href=#driver >Drive</a></li>
-	        <li><a href=#destination-page class="ui-btn-active ui-state-persist">Ride</a></li>
+	        <li><a href=#destination_page class="ui-btn-active ui-state-persist">Travel</a></li>
+	        <li><a href=#preferences_page >Preferences</a></li>
 	      </ul>
 	    </div>
       </div>
@@ -89,22 +89,29 @@
     </div>
     <script type="text/javascript" src="plan_trip_page.js"></script>
     
-    <div data-role="page" id="driver">
+    <div data-role="page" id="preferences_page">
       <div data-role="header" data-id="global_navbar" data-position="fixed">
 	    <div data-role=navbar>
 	      <ul>
-	        <li><a href=#driver class="ui-btn-active ui-state-persist">Drive</a></li>
-	        <li><a href=#destination_page>Ride</a></li>
+	        <li><a href=#destination_page>Travel</a></li>
+	        <li><a href=#preferences_page class="ui-btn-active ui-state-persist">Preferences</a></li>
 	      </ul>
 	    </div>
       </div>
+      <div data-role="header">
+        <h2>Driver preferences</h2>
+      </div>
       <div data-role="content">
-	    <label for="flip-1">Available ?</label> 
+	    <label for="flip-1">Take riders?</label> 
 	    <select name="offer" id="offer-id" data-role="slider" data-theme="e">
 	      <option value="no" >No</option>
 	      <option value="yes">Yes</option>
 	    </select>
       </div>
+      <div data-role="header">
+        <h2>Rider preferences</h2>
+      </div>
+      
     </div>
     
   </body>
