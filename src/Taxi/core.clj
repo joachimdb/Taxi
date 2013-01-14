@@ -56,7 +56,7 @@
   
 (GET "/trip:id" [id]
         (if-let [id-string (re-matches #":[0-9]+" id)]
-           (json-response (trip/get-trip (Integer/parseInt (apply str (drop 1 id-string)))))))
+           (json-response (trip/get-trip (user/current-user-id) (Integer/parseInt (apply str (drop 1 id-string)))))))
   
 (GET "/trips" []
        (json-response (trip/find-trips {:owner (user/current-user-id)})))

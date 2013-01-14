@@ -6,6 +6,8 @@ var zoomLevel = 10;
 var defaultMapTypeId = google.maps.MapTypeId.ROADMAP;
 var geocoder = new google.maps.Geocoder();
 
+var directionsService = new google.maps.DirectionsService();
+
 function setMap(center) {
     var Options = {
     		zoom: zoomLevel,
@@ -38,11 +40,11 @@ function mapClicked(latlng) {
 }
 
 function addMarker(ID,Lat,Lng,toMap) {
-    var marker = new google.maps.Marker({
-  	position: new google.maps.LatLng(Lat,Lng),
-	map: toMap
-    });
-    markers[ID]=marker;
+	var marker = new google.maps.Marker({
+		position: new google.maps.LatLng(Lat,Lng),
+		map: toMap
+	});
+	markers[ID]=marker;
     google.maps.event.addListener(marker, 'click', function() {
     	markerClicked(ID);
     })
@@ -125,4 +127,20 @@ function initialize () {
     	initMarkers(map);
     	$('#searchField').val(currentLocation.Address);
     });
+}
+
+function computeDirections(origin,destination,successCallback,failCallback) {
+	var request = {
+			origin: origin,
+			destination: destination,
+			travelMode: google.maps.DirectionsTravelMode.DRIVING
+	};
+	directionsService.route(request, function(response, status) {
+		if (status == google.maps.DirectionsStatus.OK) {
+			successCallback(response);
+		} else {
+			alert("Could not calculate route...");
+			failCallback(status);
+		}	
+	});
 }

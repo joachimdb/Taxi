@@ -15,9 +15,10 @@
     (if (= (:owner trip) current-user-id)      
       (ds/delete! trip))))
 
-(defn get-trip [storeId]
+(defn get-trip [user storeId]
   (when-let [trip (ds/retrieve Trip storeId)]
-    (assoc trip :id (.getId (:key (meta trip))))))
+    (when (= (:owner trip) user)
+      (assoc trip :id (.getId (:key (meta trip)))))))
 
 (defn- check-constraints [constraints trip]
   (every? (fn [[key val]]
