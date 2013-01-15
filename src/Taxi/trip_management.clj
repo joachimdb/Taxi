@@ -7,6 +7,7 @@
   ([user date arrivalTime latFrom lngFrom addressFrom latTo lngTo addressTo]
     (save-trip! nil user date arrivalTime latFrom lngFrom addressFrom latTo lngTo addressTo))
   ([id user date arrivalTime latFrom lngFrom addressFrom latTo lngTo addressTo]
+    (println "SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS");
     (let [r (ds/save! (Trip. user date arrivalTime latFrom lngFrom addressFrom latTo lngTo addressTo))]
       (assoc r :id (.getId (:key (meta r)))))))
   

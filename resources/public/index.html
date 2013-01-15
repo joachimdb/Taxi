@@ -13,116 +13,104 @@
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDEmEr5JLthqPARRbnDEdxNvKqTt8LSRns&sensor=false">
     </script>
     <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js"></script>    
-    <script type="text/javascript" src="core.js"></script>
+    
+    <script type="text/javascript" src="core.js"></script>  
     
     <script type="text/javascript" src="http://dev.jtsage.com/cdn/datebox/latest/jqm-datebox.core.min.js"></script>
 	<script type="text/javascript" src="http://dev.jtsage.com/cdn/datebox/latest/jqm-datebox.mode.calbox.min.js"></script>
 	<script type="text/javascript" src="http://dev.jtsage.com/cdn/datebox/i18n/jquery.mobile.datebox.i18n.en_US.utf8.js"></script>
 	<script type="text/javascript" src="http://dev.jtsage.com/cdn/datebox/latest/jqm-datebox.mode.datebox.min.js"></script>
+	
 	<script type="text/javascript" src="/_ah/channel/jsapi"></script>
   </head>
-
+  
   <body  onload="initialize()">
     
     <!-- Destinations Page -->
     <div data-role="page" id="destination_page">
       <div data-role="header" data-id="global_navbar" data-position="fixed">
-	    <div data-role=navbar>
-	      <ul>
-	        <li><a href=#destination_page class="ui-btn-active ui-state-persist">Destination</a></li>
-	        <li><a href=#preferences_page >Preferences</a></li>
-	      </ul>
-	    </div>
-      </div>
- 
-      <div data-role="content">
-	    <div id="map_canvas" style="width:100%;height:300px"></div>
-	    <form name="search_form">
-	      <fieldset class="ui-grid-a">
-	        <div class="ui-block-a" style="width:100%">
-	          <div data-role="fieldcontain" class="ui-hide-label" >
-	            <label for="searchField">Address:</label>
-		        <input id="searchField" name="searchField" type="text"/>
-	          </div>
-	        </div>
-	        <div class="ui-block-b" style="width:0%">
-	          <input type="submit" value="Search" data-inline="true"/>
-	        </div>
-	      </fieldset>
-        </form>
-	    <ul id="suggestions" data-role="listview" data-inset="true"></ul>
-	  </div>
+	<div data-role=navbar>
+	  <ul>
+	    <li><a href=#destination_page class="ui-btn-active ui-state-persist">Destination</a></li>
+	    <li><a href=#preferences_page >Preferences</a></li>
+	  </ul>
 	</div>
+      </div>
+      
+      <div data-role="content">
+	<div id="map_canvas" style="width:100%;height:300px"></div>
+	<form name="search_form">
+	  <fieldset class="ui-grid-a">
+	    <div class="ui-block-a" style="width:100%">
+	      <div data-role="fieldcontain" class="ui-hide-label" >
+	        <label for="searchField">Address:</label>
+		<input id="searchField" name="searchField" type="text"/>
+	      </div>
+	    </div>
+	    <div class="ui-block-b" style="width:0%">
+	      <input type="submit" value="Search" data-inline="true"/>
+	    </div>
+	  </fieldset>
+        </form>
+	<ul id="suggestions" data-role="listview" data-inset="true"></ul>
+      </div>
+    </div>
     <script type="text/javascript" src="destination_page.js"></script>
-
+    
     <!-- Plan Trip Page -->
     <div data-role="page" id="plan_trip_page">
       <div data-role="header">
-	    <h1>Trip</h1>
+	<h1>Trip</h1>
       </div>
       <div data-role="content">
         <form name="plan_trip_form">
           <input id="mode" name="mode" type="hidden">
           <!-- <input id="id_from" name="id_from" type="hidden" class="required"/> -->
-   	      <input id="latFrom" name="latFrom" type="hidden" class="required"/>
+   	  <input id="latFrom" name="latFrom" type="hidden" class="required"/>
           <input id="lngFrom" name="lngFrom" type="hidden" class="required"/>
-   	      <!-- <input id="id_to" name="id_to" type="hidden"/> -->
-   	      <input id="latTo" name="latTo" type="hidden" class="required"/>
+   	  <!-- <input id="id_to" name="id_to" type="hidden"/> -->
+   	  <input id="latTo" name="latTo" type="hidden" class="required"/>
           <input id="lngTo" name="lngTo" type="hidden" class="required"/>
 	  
-	      <label for="addressTo">Destination</label>          
+	  <label for="addressTo">Destination</label>          
           <input id="addressTo" name="addressTo" type="text" class="required"/>
 	  
           <label for="tripDate">Arrival date</label>
-	      <input name="tripDate" id="tripDate" type="date" data-role="datebox" data-options='{"mode": "calbox", "overrideDateFormat":"%d/%m/%Y"}' class="required"/>
+	  <input name="tripDate" id="tripDate" type="date" data-role="datebox" data-options='{"mode": "calbox", "overrideDateFormat":"%d/%m/%Y"}' class="required"/>
 	  
-	      <label for="tripTime">Arrival time</label>
-	      <input name="tripTime" id="tripTime" type="date" data-role="datebox" data-options='{"mode": "timebox", "overrideTimeFormat": 24, "overrideTimeOutput":"%k:%M"}' class="required"/>		          
+	  <label for="tripTime">Arrival time</label>
+	  <input name="tripTime" id="tripTime" type="date" data-role="datebox" data-options='{"mode": "timebox", "overrideTimeFormat": 24, "overrideTimeOutput":"%k:%M"}' class="required"/>		          
           
-	      <label for="addressFrom">From</label>
+	  <label for="addressFrom">From</label>
           <input id="addressFrom" name="addressFrom" type="text" class="required"/>		        	
-	      <ul id="suggestions_from" data-role="listview" data-inset="true"></ul>
+	  <ul id="suggestions_from" data-role="listview" data-inset="true"></ul>
           <input type="submit" value="Offer" data-inline="true"/>
           <a href="#" data-role="button" id="search_ride_button" data-inline="true">Search</a>
-	      <a href="#" data-role="button" id="cancel_plan_trip_button" data-inline="true">Cancel</a>
-	    </form>
+	  <a href="#" data-role="button" id="cancel_plan_trip_button" data-inline="true">Cancel</a>
+	</form>
       </div>
     </div>
     <script type="text/javascript" src="plan_trip_page.js"></script>
     
     <div data-role="page" id="preferences_page">
       <div data-role="header" data-id="global_navbar" data-position="fixed">
-	    <div data-role=navbar>
-	      <ul>
-	        <li><a href=#destination_page>Destination</a></li>
-	        <li><a href=#preferences_page class="ui-btn-active ui-state-persist">Preferences</a></li>
-	      </ul>
-	    </div>
+	<div data-role=navbar>
+	  <ul>
+	    <li><a href=#destination_page>Destination</a></li>
+	    <li><a href=#preferences_page class="ui-btn-active ui-state-persist">Preferences</a></li>
+	  </ul>
+	</div>
       </div>
       <div data-role="header">
         <h2>Driver preferences</h2>
       </div>
       <div data-role="content">
-        <form name="driver_preferences_form">
-          <div class="containing-element">
-    	    <label for="available_button">Take riders?</label> 
-	        <select name="available_button" id="available_button" data-role="slider">
-	          <option value="available" >No</option>
-	          <option value="not_available">Yes</option>
-	        </select>
-          </div>
-          <input type="submit" value="Save" data-inline="true"/>
-        </form>
+	<a id="btn" data-role="button" href=# data-icon="check" data-iconpos="right" selected=false data-theme="d"> Not available </a>
       </div>
       <div data-role="header">
         <h2>Rider preferences</h2>
       </div>
-      <div data-role="content">
-        <form name="rider_preferences_form">
-          <input type="submit" value="Save" data-inline="true"/>
-        </form>
-      </div>
     </div>
-    
+    <script type="text/javascript" src="driver_page.js"></script>    
   </body>
 </html>

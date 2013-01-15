@@ -1,7 +1,6 @@
 var sugList = $("#suggestions");
 
-$( '#destination_page' ).live( 'pageshow',function(event){
-    $(function() {
+$("#destination_page").on("pageshow",function(e){    $(function() {
     	sugList.html("");
     	sugList.listview("refresh");
    });
@@ -39,7 +38,7 @@ $("form[name='search_form']").submit(function() {
     		$('#searchField').val(results[0].formatted_address);
     	    var latlng = results[0].geometry.location;
     	    map.panTo(latlng);
-    	    // map.setZoom(13);
+    	    // map.setZoom(13)
     	    $("form[name='plan_trip_form'] input[name='addressFrom']").val(currentLocation.Address);
     	    $("form[name='plan_trip_form'] input[name='latFrom']").val(currentLocation.latlng.lat());
     	    $("form[name='plan_trip_form'] input[name='lngFrom']").val(currentLocation.latlng.lng());			
