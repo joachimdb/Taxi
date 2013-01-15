@@ -125,7 +125,7 @@ function setCurrentLocation (callback) {
 }
 
 function onOpened() {
-   // alert("Channel opened!");
+    // alert("Channel opened!");
 }
 
 function onError(err) {
@@ -137,12 +137,11 @@ function onMessage(msg) {
 }
 
 function onClose() {
-   alert("Channel closed!");
+    alert("Channel closed!");
 }
 
 function initializeServerChannel () {
 	$.getJSON( '/get_channel_token', function(data) {
-		alert(data);
 		serverChannelToken=data;
 		serverChannel = new goog.appengine.Channel(serverChannelToken);
 		socket = serverChannel.open();

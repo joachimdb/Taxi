@@ -1,10 +1,19 @@
 (ns Taxi.core
+<<<<<<< HEAD
   (:require [compojure.route :as route]
             [appengine-magic.services.user :as aeu]             
             [appengine-magic.services.channel :as aec] 
             )
   (:use [appengine-magic.core :as ae]
         [compojure.core]
+=======
+  (:require [appengine-magic.core :as ae]
+            [compojure.route :as route]
+            [appengine-magic.services.user :as aeu]             
+            [appengine-magic.services.channel :as aec] 
+            )
+  (:use [compojure.core]
+>>>>>>> refs/remotes/origin/master
         ;; [noir.core]
         [cheshire.core :as json] 
         [ring.util.response :as ring-response]
@@ -29,6 +38,18 @@
           (user/save-user! current-user-id))
         (application request))
       (ring-response/redirect (aeu/login-url)))))
+
+
+(defonce +channel-tokens+ (atom {}))
+(defn get-channel-token []
+  (let [current-user (user/current-user-id),
+        current-token (get @+channel-tokens+ (user/current-user-id))]
+    (if current-token
+      current-token
+      (let [new-token (aec/create-channel (user/current-user-id))]
+        (reset! +channel-tokens+
+                (assoc @+channel-tokens+ (user/current-user-id) new-token))
+        new-token))))
 
 
 (defonce +channel-tokens+ (atom {}))
@@ -82,6 +103,7 @@
          ))
   
   (GET "/ping" []
+<<<<<<< HEAD
        (json-response
          (for [[id token] @+channel-tokens+]
            (aec/send id "pong")
@@ -92,6 +114,17 @@
 ;  
 ;  (POST "/_ah/channel/disconnected/" [req]
 ;        (println "post" req " on _ah/channel/disconnected")) 
+=======
+       (json-response 
+         (aec/send (user/current-user-id) (json-response "pong"))
+         ))
+  
+  (POST "/_ah/channel/connected/" [req]
+        (println "post" req " on _ah/channel/connected"))
+  
+  (POST "/_ah/channel/disconnected/" [req]
+        (println "post" req " on _ah/channel/disconnected")) 
+>>>>>>> refs/remotes/origin/master
   
   (route/resources "/")
   (route/not-found "Page not found"))
@@ -100,3 +133,10 @@
 (ae/def-appengine-app taxi-app (var app))
 
 (ae/serve taxi-app)
+<<<<<<< HEAD
+=======
+
+(comment
+  
+  )
+>>>>>>> refs/remotes/origin/master
