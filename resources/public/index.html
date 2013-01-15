@@ -19,6 +19,7 @@
 	<script type="text/javascript" src="http://dev.jtsage.com/cdn/datebox/latest/jqm-datebox.mode.calbox.min.js"></script>
 	<script type="text/javascript" src="http://dev.jtsage.com/cdn/datebox/i18n/jquery.mobile.datebox.i18n.en_US.utf8.js"></script>
 	<script type="text/javascript" src="http://dev.jtsage.com/cdn/datebox/latest/jqm-datebox.mode.datebox.min.js"></script>
+	<script type="text/javascript" src="/_ah/channel/jsapi"></script>
   </head>
 
   <body  onload="initialize()">
@@ -28,7 +29,7 @@
       <div data-role="header" data-id="global_navbar" data-position="fixed">
 	    <div data-role=navbar>
 	      <ul>
-	        <li><a href=#destination_page class="ui-btn-active ui-state-persist">Travel</a></li>
+	        <li><a href=#destination_page class="ui-btn-active ui-state-persist">Destination</a></li>
 	        <li><a href=#preferences_page >Preferences</a></li>
 	      </ul>
 	    </div>
@@ -93,7 +94,7 @@
       <div data-role="header" data-id="global_navbar" data-position="fixed">
 	    <div data-role=navbar>
 	      <ul>
-	        <li><a href=#destination_page>Travel</a></li>
+	        <li><a href=#destination_page>Destination</a></li>
 	        <li><a href=#preferences_page class="ui-btn-active ui-state-persist">Preferences</a></li>
 	      </ul>
 	    </div>
@@ -102,16 +103,25 @@
         <h2>Driver preferences</h2>
       </div>
       <div data-role="content">
-	    <label for="flip-1">Take riders?</label> 
-	    <select name="offer" id="offer-id" data-role="slider" data-theme="e">
-	      <option value="no" >No</option>
-	      <option value="yes">Yes</option>
-	    </select>
+        <form name="driver_preferences_form">
+          <div class="containing-element">
+    	    <label for="available_button">Take riders?</label> 
+	        <select name="available_button" id="available_button" data-role="slider">
+	          <option value="available" >No</option>
+	          <option value="not_available">Yes</option>
+	        </select>
+          </div>
+          <input type="submit" value="Save" data-inline="true"/>
+        </form>
       </div>
       <div data-role="header">
         <h2>Rider preferences</h2>
       </div>
-      
+      <div data-role="content">
+        <form name="rider_preferences_form">
+          <input type="submit" value="Save" data-inline="true"/>
+        </form>
+      </div>
     </div>
     
   </body>

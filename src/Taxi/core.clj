@@ -55,11 +55,12 @@
           (json-response response)))
   
 (GET "/trip:id" [id]
-        (if-let [id-string (re-matches #":[0-9]+" id)]
-           (json-response (trip/get-trip (user/current-user-id) (Integer/parseInt (apply str (drop 1 id-string)))))))
+     (if-let [id-string (re-matches #":[0-9]+" id)]
+       (json-response (trip/get-trip (user/current-user-id) (Integer/parseInt (apply str (drop 1 id-string)))))))
   
 (GET "/trips" []
-       (json-response (trip/find-trips {:owner (user/current-user-id)})))
+     ;; note: can probably be done directly (and more efficiently) with ds/query
+     (json-response (trip/find-trips {:owner (user/current-user-id)})))
   
   (route/resources "/")
   (route/not-found "Page not found"))
