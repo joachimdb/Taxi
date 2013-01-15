@@ -13,13 +13,15 @@
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDEmEr5JLthqPARRbnDEdxNvKqTt8LSRns&sensor=false">
     </script>
     <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js"></script>    
-    <script type="text/javascript" src="core.js"></script>
     
     <script type="text/javascript" src="http://dev.jtsage.com/cdn/datebox/latest/jqm-datebox.core.min.js"></script>
 	<script type="text/javascript" src="http://dev.jtsage.com/cdn/datebox/latest/jqm-datebox.mode.calbox.min.js"></script>
 	<script type="text/javascript" src="http://dev.jtsage.com/cdn/datebox/i18n/jquery.mobile.datebox.i18n.en_US.utf8.js"></script>
 	<script type="text/javascript" src="http://dev.jtsage.com/cdn/datebox/latest/jqm-datebox.mode.datebox.min.js"></script>
+	
 	<script type="text/javascript" src="/_ah/channel/jsapi"></script>
+	
+	<script type="text/javascript" src="core.js"></script>    
   </head>
 
   <body  onload="initialize()">
@@ -102,27 +104,13 @@
       <div data-role="header">
         <h2>Driver preferences</h2>
       </div>
-      <div data-role="content">
-        <form name="driver_preferences_form">
-          <div class="containing-element">
-    	    <label for="available_button">Take riders?</label> 
-	        <select name="available_button" id="available_button" data-role="slider">
-	          <option value="available" >No</option>
-	          <option value="not_available">Yes</option>
-	        </select>
-          </div>
-          <input type="submit" value="Save" data-inline="true"/>
-        </form>
-      </div>
+		<div data-role="content">
+			<a id="btn" data-role="button" href=# data-icon="check" data-iconpos="right" selected=false data-theme="d"> Not available </a>
+		</div>
       <div data-role="header">
         <h2>Rider preferences</h2>
       </div>
-      <div data-role="content">
-        <form name="rider_preferences_form">
-          <input type="submit" value="Save" data-inline="true"/>
-        </form>
-      </div>
-    </div>
-    
+	</div>
+	<script type="text/javascript" src="driver_page.js"></script>    
   </body>
 </html>

@@ -7,4 +7,8 @@
 
   <threadsafe>true</threadsafe>
 
+  <inbound-services>
+    <service>channel_presence</service>
+  </inbound-services>
+
 </appengine-web-app>

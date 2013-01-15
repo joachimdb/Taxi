@@ -8,6 +8,9 @@ var geocoder = new google.maps.Geocoder();
 
 var directionsService = new google.maps.DirectionsService();
 
+var serverChannelToken;
+var serverChannel;
+
 function setMap(center) {
     var Options = {
     		zoom: zoomLevel,
@@ -121,12 +124,41 @@ function setCurrentLocation (callback) {
 	}
 }
 
+function onOpened() {
+    // alert("Channel opened!");
+}
+
+function onError(err) {
+	alert("Error "+err.code+": "+err.description);
+}
+
+function onMessage(msg) {
+	alert("Message: "+msg.data);
+}
+
+function onClose() {
+    alert("Channel closed!");
+}
+
+function initializeServerChannel () {
+	$.getJSON( '/get_channel_token', function(data) {
+		serverChannelToken=data;
+		serverChannel = new goog.appengine.Channel(serverChannelToken);
+		socket = serverChannel.open();
+		socket.onopen = onOpened;
+		socket.onmessage = onMessage;
+		socket.onerror = onError;
+		socket.onclose = onClose;
+	});	
+}
+
 function initialize () {
+	initializeServerChannel();
 	setCurrentLocation(function () {
-    	setMap(currentLocation.latlng);
-    	initMarkers(map);
-    	$('#searchField').val(currentLocation.Address);
-    });
+		setMap(currentLocation.latlng);
+		initMarkers(map);
+		$('#searchField').val(currentLocation.Address);
+	});
 }
 
 function computeDirections(origin,destination,successCallback,failCallback) {
