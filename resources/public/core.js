@@ -134,6 +134,13 @@ function onError(err) {
 
 function onMessage(msg) {
 	alert("Message: "+msg.data);
+	alert(msg.data.substring(0,4));
+	if (msg.data.substring(0,4) == "ping") {
+		alert("received ping")
+		$.post( "/pong", msg.data, function(data) {
+			alert("sent pong"+data);
+		});
+	}		
 }
 
 function onClose() {
@@ -141,7 +148,7 @@ function onClose() {
 }
 
 function initializeServerChannel () {
-	$.getJSON( '/get_channel_token', function(data) {
+	$.post( '/get_channel_token', {}, function(data) {
 		serverChannelToken=data;
 		serverChannel = new goog.appengine.Channel(serverChannelToken);
 		socket = serverChannel.open();

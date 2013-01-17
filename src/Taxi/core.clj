@@ -12,7 +12,22 @@
         [Taxi.usr-management :as user]
         [Taxi.trip-management :as trip]))
 
+;; 
 (ae/stop)
+
+(defn trip-to-message [trip]
+  {:msg-id (:trip-id trip)
+   :content
+   (str "&mode=" (:mode trip)
+        "&owner=" (:owner trip)
+        "&date=" (:date trip)
+        "&arrivalTime=" (:arrivalTime trip)
+        "&latFrom=" (:latFrom trip)
+        "&lngFrom=" (:lngFrom trip)
+        "&addressFrom=" (:addressFrom trip)
+        "&latTo=" (:latTo trip)
+        "&lngTo=" (:lngTo trip)
+        "&addressTo=" (:addressTo trip))})
 
 (defn json-response [data & [status]]
   {:status (or status 200)
@@ -24,9 +39,9 @@
     (if-let [current-user-id (user/current-user-id)] 
       (do
         (println "checking if user " current-user-id " exists")
-        (when-not (user/get-user current-user-id)
-          (println "new-user!")
-          (user/save-user! current-user-id))
+        (if-not (user/get-user current-user-id)    
+          (user/save-user!)
+          (user/update-user current-user-id))
         (application request))
       (ring-response/redirect (aeu/login-url)))))
 
@@ -43,7 +58,7 @@
         new-token))))
 
 
-(defonce +channel-tokens+ (atom {}))
+(def +channel-tokens+ (atom {}))
 (defn get-channel-token []
   (let [current-user (user/current-user-id),
         current-token (get @+channel-tokens+ (user/current-user-id))]
@@ -63,21 +78,28 @@
        (json-response (user/get-all-users)))
   
   (POST "/new_trip" {params :params}
-        (println "save-trip: " params)
         (let [id (try (Integer/parseInt (:tripId params))
                    (catch Exception e nil))
-              response (trip/save-trip! id 
-                                        (user/current-user-id)
-                                        (:tripDate params) 
-                                        (:tripTime params)
-                                        (Float/parseFloat (:latFrom params))
-                                        (Float/parseFloat (:lngFrom params))
-                                        (:addressFrom params)
-                                        (Float/parseFloat (:latTo params))
-                                        (Float/parseFloat (:lngTo params))
-                                        (:addressTo params))]
-          (println "resp: " response)
-          (json-response response)))
+              trip (trip/save-trip! id 
+                                    (:mode params) 
+                                    (user/current-user-id)
+                                    (:tripDate params) 
+                                    (:tripTime params)
+                                    (Float/parseFloat (:latFrom params))
+                                    (Float/parseFloat (:lngFrom params))
+                                    (:addressFrom params)
+                                    (Float/parseFloat (:latTo params))
+                                    (Float/parseFloat (:lngTo params))
+                                    (:addressTo params))
+              possible-matches (trip/find-matches trip)]
+          (println "New trip: " trip)
+          (println "Matches: " (trip/find-matches trip))
+          (dorun (map (fn [match]
+                        (user/send-message (:owner trip) 
+                                           (trip-to-message match))
+                        (user/send-message (:owner match) (trip-to-message trip)))
+                      possible-matches))
+          (json-response trip)))
   
   (GET "/trip:id" [id]
        (if-let [id-string (re-matches #":[0-9]+" id)]
@@ -87,29 +109,24 @@
        ;; note: can probably be done directly (and more efficiently) with ds/query
        (json-response (trip/find-trips {:owner (user/current-user-id)})))
   
-  (GET "/get_channel_token" []
+  (POST "/get_channel_token" {params :params}
        (let [token (get-channel-token)]
          (println "token: " token)
          (json-response token)
          ))
   
-  (GET "/ping" []
-       (json-response
-         (for [[id token] @+channel-tokens+]
-           (aec/send id "pong")
-         )))
+  (POST "/pong" {params :params}
+       (println "received pong: " params)
+       (user/confirm-received (current-user-id) (:msg-id params))
+       (json-response nil))
   
-;  (POST "/_ah/channel/connected/" [req]
-;        (println "post" req " on _ah/channel/connected"))
-;  
-;  (POST "/_ah/channel/disconnected/" [req]
-;        (println "post" req " on _ah/channel/disconnected")) 
-
-  (POST "/_ah/channel/connected/" [req]
-        (println "post" req " on _ah/channel/connected"))
+  (POST "/_ah/channel/connected" {params :params}
+        (println "post " params " on /_ah/channel/connected")
+        (json-response params))
   
-  (POST "/_ah/channel/disconnected/" [req]
-        (println "post" req " on _ah/channel/disconnected")) 
+  (POST "/_ah/channel/disconnected" {params :params}
+        (println "post " params " on _ah/channel/disconnected")
+        (json-response params))
   
   (route/resources "/")
   (route/not-found "Page not found"))
@@ -117,4 +134,6 @@
 (def app (require-login (comp-handler/api taxi-main-handler)))
 (ae/def-appengine-app taxi-app (var app))
 
+;; 
 (ae/serve taxi-app)
+
