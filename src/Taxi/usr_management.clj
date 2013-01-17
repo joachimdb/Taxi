@@ -1,9 +1,10 @@
+
 (ns Taxi.usr-management
   (:require [appengine-magic.services.user :as aeu]
             [appengine-magic.services.datastore :as ds]
             [appengine-magic.services.channel :as aec]))
 
-(ds/defentity User [^:key email, nickname, ^:clj messages])
+(ds/defentity User [^:key email, nickname, last-updated, ^:clj pending])
 
 (defn current-user-id []
   (when (aeu/user-logged-in?)
@@ -15,11 +16,10 @@
 
 (defn save-user! 
   ([] (save-user! (current-user-id)
-                  (current-user-nickname)
-                  {}))
+                  (current-user-nickname)))
   ([user] (ds/save! user))
-  ([email nickname messages]
-    (ds/save! (User. email nickname messages))))
+  ([email nickname]
+    (ds/save! (User. email nickname (java.util.Date.) {}))))
 
 (defn get-user [email]
   (ds/retrieve User email))
@@ -33,27 +33,28 @@
   ;; (3) Later, when the client answers with a pong and the same message id, the message 
   ;;     is deleted through a call to confirm-received
   (let [usr (get-user user-id)
-        msg-id (str (:msg-id message))
+        msg-id (str (:msgId message))
         content (:content message)]
-    (println "sending msg " msg-id " to " user-id)
-    (save-user! (assoc-in usr [:messages msg-id] 
+    (println (.toString (java.util.Date.))
+             " Sending msg " msg-id " to " user-id)
+    (save-user! (assoc-in usr [:pending msg-id] 
                           (:content message)))
-    (aec/send user-id (str "ping&msg-id=" msg-id (:content message)))))
+    (aec/send user-id (str "&msgId=" msg-id (:content message)))))
   
 (defn confirm-received [user-id msg-id]
-  (println "confirmation for " msg-id " from " user-id)
+  (println (.toString (java.util.Date.))
+           " Confirmation for " msg-id " from " user-id)
   (let [usr (get-user user-id)]
-    (println (assoc usr :messages
-                    (dissoc (:messages usr) msg-id)))
-    (save-user! (assoc usr :messages
-                    (dissoc (:messages usr) msg-id)))))
+    (save-user! (assoc usr 
+                       :pending (dissoc (:pending usr) msg-id)))))
 
-(defn update-user [user-id]
+(defn update-user [usr]
   ;; send all messaged not received yet
-  (println "updating user " user-id)
-  (println (:messages (get-user user-id)))
-  (dorun (map (fn [[msg-id content]] 
-                (println "resending message " msg-id " to " user-id)
-                (aec/send user-id (str "ping&msg-id=" msg-id content))
-                )
-              (:messages (get-user user-id)))))
+  (let [user-id (:email usr)]
+    (dorun (map (fn [[msg-id content]] 
+                  (println (.toString (java.util.Date.))
+                           " Resending message " msg-id " to " user-id)
+                  (aec/send user-id (str "&msgId=" msg-id content))
+                  )
+                (:pending (get-user user-id))))
+    (save-user! (assoc usr :last-updated (java.util.Date.)))))

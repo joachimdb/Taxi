@@ -26,13 +26,11 @@
           constraints))
 
 (defn find-trips [constraints]
-  (println "find-trips" constraints)
   (map #(assoc % :trip-id (.getId (:key (meta %))))
        (filter (partial check-constraints constraints)
                (ds/query :kind Trip))))
 
 (defn find-matches [for-trip]
-  (println "mode: " (:mode for-trip))
   (let [req-mode (if (= "offering" (:mode for-trip)) "searching" "offering")]
     (map #(assoc % :trip-id (.getId (:key (meta %))))
          (ds/query :kind Trip :filter (= :mode req-mode)))))

@@ -91,4 +91,3 @@ $('#cancel_plan_trip_button').click(
     	$.mobile.changePage($("#destination_page"), { transition: "pop", role: "page", reverse: false } );
     });
 
-$.post("/_ah/channel/connected",{},function(data){alert(data)})

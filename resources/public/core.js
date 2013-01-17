@@ -132,15 +132,22 @@ function onError(err) {
 	alert("Error "+err.code+": "+err.description);
 }
 
+function parseMessage(msg) {
+	var result={};
+	var match;
+	pl     = /\+/g;  // Regex for replacing addition symbol with a space
+	search = /([^&=]+)=?([^&]*)/g;
+	decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); };
+	while (match = search.exec(msg))
+		result[decode(match[1])] = decode(match[2]);
+	return result;
+}	
+		
 function onMessage(msg) {
-	alert("Message: "+msg.data);
-	alert(msg.data.substring(0,4));
-	if (msg.data.substring(0,4) == "ping") {
-		alert("received ping")
-		$.post( "/pong", msg.data, function(data) {
-			alert("sent pong"+data);
-		});
-	}		
+	alert("Message received from server:\n"+msg.data)
+	var response={msgId:parseMessage(msg.data).msgId};
+	$.post( "/confirm", response, function(data) {
+	});
 }
 
 function onClose() {
@@ -156,6 +163,7 @@ function initializeServerChannel () {
 		socket.onmessage = onMessage;
 		socket.onerror = onError;
 		socket.onclose = onClose;
+		$.getJSON( '/token_received', function(data) {});
 	});	
 }
 

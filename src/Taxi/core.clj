@@ -16,7 +16,7 @@
 (ae/stop)
 
 (defn trip-to-message [trip]
-  {:msg-id (:trip-id trip)
+  {:msgId (:trip-id trip)
    :content
    (str "&mode=" (:mode trip)
         "&owner=" (:owner trip)
@@ -38,10 +38,19 @@
   (fn [request] 
     (if-let [current-user-id (user/current-user-id)] 
       (do
-        (println "checking if user " current-user-id " exists")
-        (if-not (user/get-user current-user-id)    
-          (user/save-user!)
-          (user/update-user current-user-id))
+        (if-let [usr (user/get-user current-user-id)]
+          (when (> (- (.getTime (java.util.Date.))
+                      (.getTime (:last-updated usr)))
+                   60000)
+            (println (.toString (java.util.Date.))
+                     " Updating user" (user/current-user-id) " (elapsed time since last update: " 
+                     (- (.getTime (java.util.Date.))
+                        (.getTime (:last-updated usr)))
+                     ")")
+            (user/update-user usr))
+          (do (println (.toString (java.util.Date.))
+                     " Adding user " (user/current-user-id))
+            (user/save-user!)))
         (application request))
       (ring-response/redirect (aeu/login-url)))))
 
@@ -60,18 +69,17 @@
 
 (def +channel-tokens+ (atom {}))
 (defn get-channel-token []
-  (let [current-user (user/current-user-id),
-        current-token (get @+channel-tokens+ (user/current-user-id))]
+  (let [current-user-id (user/current-user-id),
+        current-token (get @+channel-tokens+ current-user-id)]
     (if current-token
       current-token
-      (let [new-token (aec/create-channel (user/current-user-id))]
+      (let [new-token (aec/create-channel current-user-id)]
         (reset! +channel-tokens+
-                (assoc @+channel-tokens+ (user/current-user-id) new-token))
+                (assoc @+channel-tokens+ current-user-id new-token))
         new-token))))
 
 (defroutes taxi-main-handler
-  (GET "/" [location-hint] 
-       (println location-hint)
+  (GET "/" [] 
        (ring-response/redirect "/index.html"))
   
   (GET "/users" []
@@ -92,8 +100,8 @@
                                     (Float/parseFloat (:lngTo params))
                                     (:addressTo params))
               possible-matches (trip/find-matches trip)]
-          (println "New trip: " trip)
-          (println "Matches: " (trip/find-matches trip))
+          (println (.toString (.toString (java.util.Date.)))
+                   " New trip: " trip)
           (dorun (map (fn [match]
                         (user/send-message (:owner trip) 
                                            (trip-to-message match))
@@ -110,23 +118,15 @@
        (json-response (trip/find-trips {:owner (user/current-user-id)})))
   
   (POST "/get_channel_token" {params :params}
-       (let [token (get-channel-token)]
-         (println "token: " token)
-         (json-response token)
-         ))
+        (json-response (get-channel-token)))
   
-  (POST "/pong" {params :params}
-       (println "received pong: " params)
-       (user/confirm-received (current-user-id) (:msg-id params))
+  (GET "/token_received" []
+       (user/update-user (user/get-user (user/current-user-id)))
+       (json-response "OK"))
+  
+  (POST "/confirm" {params :params}
+       (user/confirm-received (current-user-id) (:msgId params))
        (json-response nil))
-  
-  (POST "/_ah/channel/connected" {params :params}
-        (println "post " params " on /_ah/channel/connected")
-        (json-response params))
-  
-  (POST "/_ah/channel/disconnected" {params :params}
-        (println "post " params " on _ah/channel/disconnected")
-        (json-response params))
   
   (route/resources "/")
   (route/not-found "Page not found"))
