@@ -7,27 +7,22 @@
   (:use [compojure.core]
         ;; [noir.core]
         [cheshire.core :as json] 
+        [cheshire.generate :as json-gen :only [add-encoder encode-map]]
         [ring.util.response :as ring-response]
         [compojure.handler :as comp-handler]
         [Taxi.usr-management :as user]
-        [Taxi.trip-management :as trip]))
+        [Taxi.trip-management :as trip])
+  (:import java.text.SimpleDateFormat
+           com.google.appengine.api.datastore.GeoPt))
 
 ;; 
 (ae/stop)
 
-(defn trip-to-message [trip]
-  {:msgId (:trip-id trip)
-   :content
-   (str "&mode=" (:mode trip)
-        "&owner=" (:owner trip)
-        "&date=" (:date trip)
-        "&arrivalTime=" (:arrivalTime trip)
-        "&latFrom=" (:latFrom trip)
-        "&lngFrom=" (:lngFrom trip)
-        "&addressFrom=" (:addressFrom trip)
-        "&latTo=" (:latTo trip)
-        "&lngTo=" (:lngTo trip)
-        "&addressTo=" (:addressTo trip))})
+(json-gen/add-encoder com.google.appengine.api.datastore.GeoPt
+                      (fn [geoPt jsonGenerator]
+                        (json-gen/encode-map {:latitude (.getLatitude geoPt),
+                                              :longitude (.getLongitude geoPt)}
+                                             jsonGenerator)))
 
 (defn json-response [data & [status]]
   {:status (or status 200)
@@ -88,24 +83,27 @@
   (POST "/new_trip" {params :params}
         (let [id (try (Integer/parseInt (:tripId params))
                    (catch Exception e nil))
+              arrival-date (.parse (java.text.SimpleDateFormat. "dd/MM/yyyy hh:mm")
+                             (str (:tripDate params) " " (:tripTime params)))
+              start-location (GeoPt. (Float/parseFloat (:latFrom params))
+                                     (Float/parseFloat (:lngFrom params)))
+              destination (GeoPt. (Float/parseFloat (:latTo params))
+                                  (Float/parseFloat (:lngTo params)))
               trip (trip/save-trip! id 
                                     (:mode params) 
                                     (user/current-user-id)
-                                    (:tripDate params) 
-                                    (:tripTime params)
-                                    (Float/parseFloat (:latFrom params))
-                                    (Float/parseFloat (:lngFrom params))
+                                    arrival-date
+                                    start-location
                                     (:addressFrom params)
-                                    (Float/parseFloat (:latTo params))
-                                    (Float/parseFloat (:lngTo params))
+                                    destination
                                     (:addressTo params))
               possible-matches (trip/find-matches trip)]
           (println (.toString (.toString (java.util.Date.)))
                    " New trip: " trip)
           (dorun (map (fn [match]
                         (user/send-message (:owner trip) 
-                                           (trip-to-message match))
-                        (user/send-message (:owner match) (trip-to-message trip)))
+                                           (trip/encode-trip match))
+                        (user/send-message (:owner match) (trip/encode-trip trip)))
                       possible-matches))
           (json-response trip)))
   

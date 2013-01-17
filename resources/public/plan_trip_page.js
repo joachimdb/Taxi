@@ -57,8 +57,7 @@ $("form[name='plan_trip_form']").submit(function() {
 		$("form[name='plan_trip_form']").valid();
 		if ($("form[name='plan_trip_form']").validate().numberOfInvalids()==0) {
 			$.post("/new_trip", $("form[name='plan_trip_form']").serializeArray(), function(data){
-				addMarker(data.id,data.latTo,data.lngTo,map);
-				alert("Request registered");
+				addMarker(data.tripId,data.geoPtTo.latitude,data.geoPtTo.longitude,map);
 				$.mobile.changePage($("#destination_page"), { transition: "pop", role: "page", reverse: false } );
 			});
 		}
@@ -81,7 +80,7 @@ $('#search_ride_button').click(function(){
 	$("form[name='plan_trip_form']").valid();
 	if ($("form[name='plan_trip_form']").validate().numberOfInvalids()==0) {
 		$.post("/new_trip", $("form[name='plan_trip_form']").serializeArray(), function(data){
-			addMarker(data.id,data.latTo,data.lngTo,map);
+			addMarker(data.tripId,data.geoPtTo.latitude,data.geoPtTo.longitude,map);
 			$.mobile.changePage($("#destination_page"), { transition: "pop", role: "page", reverse: false } );
 		});
 	}});

@@ -84,7 +84,7 @@ function markerClicked(ID) {
 function initMarkers(toMap) {
 	$.getJSON( '/trips', function(data) {
 		$.each(data, function(i, trip) {
-			addMarker(trip.id,trip.latTo,trip.lngTo,toMap);
+			addMarker(trip.tripId,trip.geoPtTo.latitude,trip.geoPtTo.longitude,toMap);
 		});});
 }
 
